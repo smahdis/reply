@@ -1,0 +1,109 @@
+
+.mdl-card{
+
+    margin: 0px; padding: 0px;
+        overflow: visible;
+    z-index: auto;
+}
+
+
+.mdl-card__title-text{
+    font-family: BTitr;
+    font-size: 26px;
+    color: white;
+    margin-right: 15px;
+}
+
+.mdl-card__actions {
+    display: flex;
+    box-sizing:border-box;
+    align-items: center;
+}
+.mdl-card__actions > .mdl-button--icon {
+    margin-right: 3px;
+    margin-left: 3px;
+}
+
+
+/*.mdl-navigation__link{*/
+/*color: #fff;;*/
+/*}*/
+
+
+.mdl-card .mdl-card__supporting-text {
+    /*margin-left: 20px;*/
+    margin-right: 15px;
+
+}
+
+.mdl-navigation .material-icons{
+    margin-left: 20px;
+    margin-right: 15px;
+
+}
+
+a.mdl-js-ripple-effect { position: relative; }
+
+/* Position the drawer below the header */
+.mdl-layout--clipped-drawer .mdl-layout__drawer {
+    margin-top: 64px;
+    height: calc(100% - 64px);
+}
+
+.mdl-layout--clipped-drawer.is-small-screen .mdl-layout__drawer { /* On smaller screens where the header is smaller */
+    margin-top: 56px;
+    height: calc(100% - 56px);
+}
+
+/* Position the obfuscator below the header */
+.mdl-layout--clipped-drawer .mdl-layout__obfuscator {
+    margin-top: 64px;
+    height: calc(100% - 64px);
+}
+
+.mdl-layout--clipped-drawer.is-small-screen .mdl-layout__obfuscator {
+    margin-top: 56px;
+    height: calc(100% - 56px);
+}
+
+
+/*!**/
+ /** Fixed draw layout*/
+ /**!*/
+
+/*!* Expand the header over the space reserved for the full-height navigation draw *!*/
+/*.mdl-layout--clipped-drawer.mdl-layout--fixed-drawer>header.mdl-layout__header {*/
+    /*margin-left: 0;*/
+    /*width: 100%;*/
+/*}*/
+
+/*!* Hide the hamburger icon when the drawer is showing *!*/
+/*.mdl-layout--clipped-drawer.mdl-layout--fixed-drawer:not(.is-small-screen) .mdl-layout__drawer-button {*/
+    /*display: none;*/
+/*}*/
+
+
+/*!*Navigation with icons*!*/
+.demo-navigation {
+    flex-grow: 1;
+}
+
+.mdl-navigation .mdl-navigation__link {
+    display: flex !important;
+    flex-direction: row;
+    align-items: center;
+    color: rgba(255, 255, 255, 0.56);
+    font-weight: 500;
+}
+.mdl-navigation .mdl-navigation__link:hover .mdl-navigation__link:active{
+    background-color: #00BCD4;
+    color: #37474F;
+}
+.mdl-navigation .mdl-navigation__link .material-icons {
+    font-size: 24px;
+    color: rgba(255, 255, 255, 0.56);
+    margin-left: 32px;
+}
+
+
+

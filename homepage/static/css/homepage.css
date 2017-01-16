@@ -1,0 +1,106 @@
+
+@font-face {
+    font-family: 'BTitr';
+    src: url('fonts/BTitr.eot');
+    src: url('fonts/BTitr.eot?#iefix') format('embedded-opentype'),
+    url('fonts/BTitr.woff') format('woff'),
+    url('fonts/BTitr.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+
+@font-face {
+    font-family: 'Yekan';
+    src: url('fonts/Yekan.eot?-wwn5ej');
+    src: url('fonts/Yekan.eot?#iefix-wwn5ej') format('embedded-opentype'),
+    url('fonts/Yekan.woff?-wwn5ej') format('woff'),
+    url('fonts/Yekan.ttf?-wwn5ej') format('truetype'),
+    url('fonts/Yekan.svg?-wwn5ej#icomoon') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+html, body {
+    font-family: 'Yekan','Roboto', 'Helvetica', sans-serif;
+    direction: rtl;
+    background-color:  #9ad9f9
+}
+
+.content-grid{
+    max-width: 960px;
+}
+
+.page-content{
+    direction: rtl;
+}
+
+#post_content{
+    font-size: 18px;
+    text-align: justify;
+    color: white;
+}
+
+.no-margin{
+    margin: 0px; padding: 0px;
+}
+
+.vote_container{
+    margin-top: 30px; padding: 0px;
+}
+
+.icons{
+    width:32px;
+    height:32px
+}
+
+.icons-small{
+    width:24px;
+    height:24px
+}
+
+/*a{*/
+/*color: #fff;*/
+/*text-decoration: none;*/
+/*}*/
+
+.mdl-card__title a:link, a:visited {
+    background-color: transparent;
+    color: #fff;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.mdl-card__title a:hover, a:active {
+    /*background-color: green;*/
+    /*color: white;*/
+}
+
+.mdl-navigation a{
+    display: flex !important;
+    flex-direction: row;
+    align-items: center;
+    color: rgba(255, 255, 255, 0.56);
+    font-weight: 500;
+    text-decoration: none;
+    padding: 20px;
+}
+.mdl-navigation a:hover, a:active {
+    background-color: #00BCD4;
+    color: #37474F;
+}
+
+.demo-ribbon {
+    width: 100%;
+    height: 40vh;
+    background-color: #3F51B5;
+    flex-shrink: 0;
+}
+.demo-main {
+    margin-top: -35vh;
+    flex-shrink: 0;
+}
+
+H1 {display: inline;}

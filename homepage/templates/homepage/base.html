@@ -1,0 +1,103 @@
+{% load staticfiles %}
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Reply</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.brown-red.min.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="{% static 'css/mdl_related.css' %}">
+    <link rel="stylesheet" href="{% static 'css/homepage.css' %}">
+
+</head>
+
+<body>
+
+<div class="mdl-layout mdl-layout mdl-layout--no-desktop-drawer-button mdl-js-layout mdl-layout--fixed-header" style="direction: ltr;">
+    <header class="mdl-layout__header mdl-layout__header--scroll">
+        <div class="mdl-layout__header-row" style="direction: rtl;">
+            <span style="font-family: Yekan; color: #fff; font-size:22px; font-weight: normal; margin: 20px"><a style="text-decoration: none;" class="mdl-js-button mdl-js-ripple-effect" href="{% url 'index' %}">ریپلای</a></span>
+            <div class="mdl-layout-spacer"></div>
+            <nav class="mdl-navigation mdl-layout--large-screen-only" style="font-family: Yekan; ">
+                <a style="color: #fff; font-size:18px; font-weight: bold" class="mdl-navigation__link mdl-js-button mdl-js-ripple-effect is-active" href="#">تازه ترین ها</a>
+                <a style="color: #fff; font-size:18px; font-weight: bold" class="mdl-navigation__link mdl-js-button mdl-js-ripple-effect" href="#">پر پاسخ ترین ها</a>
+                <a style="color: #fff; font-size:18px; font-weight: bold" class="mdl-navigation__link mdl-js-button mdl-js-ripple-effect" href="#">پر بازدید ترین ها</a>
+            </nav>
+        </div>
+
+
+    </header>
+    <div class="mdl-layout__drawer" style="background-color: darkcyan">
+        <span class="mdl-layout-title">Reply</span>
+        <nav class="mdl-navigation" style="font-family: Yekan;  direction: rtl;" >
+
+            <a style="color: #fff; font-size:18px; font-weight: normal" class="mdl-js-button mdl-js-ripple-effect" href="#"><i class="material-icons">inbox</i>سئوال جدید</a>
+            <div class="mdl-layout-spacer"></div>
+            <span></span>
+            <span style="color: darkgray; font-size:18px; font-weight: normal; margin: 20px">ترین های هفته</span>
+            <div class="mdl-layout-spacer"></div>
+            <a style="color: #fff; font-size:18px; font-weight: normal;" class="mdl-js-button mdl-js-ripple-effect" href="#"><i style="margin-left: 20px" class="material-icons">inbox</i>جدیدترین</a>
+            <a style="color: #fff; font-size:18px; font-weight: normal;" class="mdl-js-button mdl-js-ripple-effect" href="#"><i class="material-icons">inbox</i>داغ ترین</a>
+            <a style="color: #fff; font-size:18px; font-weight: normal;" class="mdl-js-button mdl-js-ripple-effect" href="#"><i class="material-icons">inbox</i>پربازدیدترین</a>
+            <a style="color: #fff; font-size:18px; font-weight: normal;" class="mdl-js-button mdl-js-ripple-effect" href="#"><i class="material-icons">inbox</i>رو به رشد</a>
+            <a style="color: #fff; font-size:18px; font-weight: normal;" class="mdl-js-button mdl-js-ripple-effect" href="#"><i class="material-icons">inbox</i>برگزیده</a>
+
+        </nav>
+    </div>
+
+    {#    <div class="mdl-layout--large-screen-only mdl-layout__header-row"></div>#}
+
+
+    <main class="mdl-layout__content" style="flex: 1 0 auto;">
+        <div class="page-content">
+            {% block content %}
+            {% endblock %}
+        </div>
+
+    </main>
+    <footer class="mdl-mini-footer">
+        <div class="mdl-mini-footer__left-section">
+            <div class="mdl-logo">Title</div>
+            <ul class="mdl-mini-footer__link-list">
+                <li><a href="#">Help</a></li>
+                <li><a href="#">Privacy & Terms</a></li>
+            </ul>
+        </div>
+    </footer>
+</div>
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="{% static 'javascript/initial.js' %}"></script>
+<script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('.profile-pic').initial({
+            height: 32,
+            width: 32,
+            fontSize: 16,
+            fontFamily: 'sans-serif',
+
+        });
+    });
+</script>
+<script>
+    String.prototype.toIndiaDigits= function(){
+        var id= ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+        return this.replace(/[0-9]/g, function(w){
+            return id[+w]
+        });
+    }
+    elements = document.getElementsByClassName("days_ago");
+    for (var i = 0; i < elements.length; i++) {
+        {#            elements[i].style.backgroundColor="blue";#}
+        value = elements[i].innerHTML;
+        elements[i].innerHTML = value.toIndiaDigits();
+    }
+</script>
+</body>
+
+</html>
