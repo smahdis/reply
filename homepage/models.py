@@ -6,31 +6,34 @@ from django.contrib.auth.models import User
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 from django.utils.encoding import python_2_unicode_compatible
+from taggit.managers import TaggableManager
 
 @python_2_unicode_compatible
 class Post(models.Model):
-    poster = models.ForeignKey('Profile')
+    poster = models.ForeignKey('auth.user')
     question = models.ForeignKey('self', null=True, blank=True)
 
-    post_title = models.TextField(max_length=300)
+    post_title = models.CharField(max_length=300)
     post_content = models.TextField()
 
     votes = models.IntegerField(null=True, blank=True)
     views = models.IntegerField(null=True, blank=True)
 
-    is_published = models.BooleanField()
-    is_locked = models.BooleanField()
-    is_question = models.BooleanField()
-    is_deleted = models.BooleanField()
+    is_published = models.BooleanField(default=True)
+    is_locked = models.BooleanField(default=False)
+    is_question = models.BooleanField(default=True)
+    is_deleted = models.BooleanField(default=False)
 
     created_date = models.DateTimeField(
             default=timezone.now)
     published_date = models.DateTimeField(
             blank=True, null=True)
 
-    tags = models.TextField()
+    tags = TaggableManager()
 
-
+    def return_tags(self):
+        taglist = self.tags.names()
+        return taglist
 
     def publish(self):
         self.published_date = timezone.now()
@@ -58,5 +61,10 @@ class Profile(models.Model):
     def save_user_profile(sender, instance, **kwargs):
         instance.profile.save()
 
+    @classmethod
+    def create(cls, title):
+        book = cls(title=title)
+        # do something with the book
+        return book
     def __str__(self):
         return self.user.username

@@ -1,0 +1,151 @@
+{% extends 'homepage/base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+    {#    <h1>New post</h1>#}
+    {#    <form method="POST" class="post-form">{% csrf_token %}#}
+    {#        {{ form.as_p }}#}
+    {#        <button type="submit" class="save btn btn-default">Save</button>#}
+    {#    </form>#}
+    <head>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="{% static 'javascript/tag-it.js' %}" type="text/javascript" charset="utf-8"></script>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/tagit.ui-zendesk.css' %}">
+        <link href="{% static 'css/jquery.tagit.css' %}" rel="stylesheet" type="text/css">
+        {{ form.media }}
+    </head>
+    <div class="content-grid mdl-grid" style="margin-right: auto; margin-left: auto">
+        <div class="no-margin mdl-card mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone mdl-shadow--2dp"  style="padding: 20px">
+            <div id="inner">
+                <form method="POST" onsubmit="DoSubmit();">{% csrf_token %}
+                    {{ form.non_field_errors }}
+                    {% if form.errors %}
+                        <div id="form-error">
+                            <p>لطفا اشکالات زیر را برطرف کنید.</p>
+                            <ul>
+                                {% for field, errors in form.errors.items %}
+                                    {% for error in errors %}
+                                        <li>{{ error|striptags }}</li>
+                                    {% endfor %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="display: block">
+                        <input class="mdl-textfield__input formEdit" type="text" id="post_title" name="{{ form.post_title.name }}" id="id_{{ form.post_title.name }}" value="{{ form.post_title.value }}" >
+                        <label class="mdl-textfield__label formEdit" >عنوان</label>
+                    </div>
+
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="display: block" hidden>
+                        <textarea type="text" class="realContent mdl-textfield__input formEdit" rows= "5" cols="80" dir="rtl" name="{{ form.post_content.name }}"id="id_post_content"value="{{ form.post_content.value }}" >{{ form.post_content.value }}</textarea>
+                        <label class="mdl-textfield__label formEdit" for="id_{{ form.post_content.name }}">جزییات سئوال</label>
+                    </div>
+
+                    {#                                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="display: block; " >#}
+                    {#                                            <textarea type="text" rows= "5" cols="80" dir="rtl" name="{{ form.content.name }}"id="id_{{ form.content.name }}"value="{{ form.content.value }}" >{{ form.content.value }}</textarea>#}
+                    {#                                            <label class="mdl-textfield__label formEdit" for="id_{{ form.content.name }}">جزییات سئوال</label>#}
+                    {#                                        </div>#}
+
+                    <div class="toolbar">
+                        <a data-command='undo' style="color: #fff; float: right;" class="mdl-js-button mdl-js-ripple-effect" href="#"><i class="material-icons md-18">undo</i></a>
+                        <a data-command='redo' style="color: #fff; float: right;" class="mdl-js-button mdl-js-ripple-effect" href="#"><i class="material-icons md-18">redo</i></a>
+                        <a data-command='bold' style="color: #fff;" class="mdl-js-button mdl-js-ripple-effect" href="#"><i class="material-icons md-18">format_bold</i></a>
+                        <a data-command='italic' style="color: #fff;" class="mdl-js-button mdl-js-ripple-effect" href="#"><i class="material-icons md-18">format_italic</i></a>
+                        <a data-command='underline' style="color: #fff;" class="mdl-js-button mdl-js-ripple-effect" href="#"><i class="material-icons md-18">format_underline</i></a>
+
+                        <span style="margin-left: 10px; margin-right: 10px;"></span>
+
+                        <a data-command='createlink'' style="color: #fff;" class="mdl-js-button mdl-js-ripple-effect" href="#"><i class="material-icons md-18">link</i></a>
+                        <a data-command='blockquote' style="color: #fff;" class="mdl-js-button mdl-js-ripple-effect" href="#"><i class="material-icons md-18">format_quote</i></a>
+                        <a data-command='code' style="color: #fff;" class="mdl-js-button mdl-js-ripple-effect" href="#"><i class="material-icons md-18">code</i></a>
+
+                    </div>
+
+                    <div id='editor' contenteditable>
+                        {{ form.post_content.value|safe }}
+                    </div>
+
+
+
+                    <div style="display: block; margin-top: 50px">
+                        <label>لطفا حداقل یک تگ وارد نمایید. تگ ها را با فاصله یا ویرگول از جدا کنید.</label>
+                        <input class="mdl-textfield__input formEdit" type="text" id="myTags"  dir="rtl"
+                               name="{{ form.tags.name }}"
+                               id="id_{{ form.tags.name }}"
+                               value="{{ post.return_tags|join:", " }}"
+                        >
+                    </div>
+                    <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-color--cyan-300 generalClass" style="float: left; margin-top: 20px" type="submit"> ذخیره</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+    <script type="text/javascript">
+        document.body.style.backgroundColor="#f7f7f7";
+
+        $(document).ready(function() {
+            $("#myTags").tagit({
+
+                // Options
+                fieldName: "skills",
+                availableTags: ["c++", "java", "php", "javascript", "ruby", "python", "c"],
+                autocomplete: {delay: 0, minLength: 2},
+                showAutocompleteOnFocus: false,
+                removeConfirmation: true,
+                caseSensitive: false,
+                allowDuplicates: false,
+                allowSpaces: false,
+                readOnly: false,
+                tagLimit: 5,
+                singleField: true,
+                singleFieldDelimiter: ',',
+                singleFieldNode: null,
+                tabIndex: null,
+                placeholderText: 'تگ',
+
+            });
+
+        });
+
+    </script>
+
+
+    <script>
+        var div = document.getElementById('editor');
+
+        $('.toolbar a').click(function(e) {
+            var command = $(this).data('command');
+            if (command == 'h1' || command == 'h2' || command == 'p' || command == 'blockquote' || command == 'code') {
+                document.execCommand('formatBlock', false, command);
+            }
+
+            if (command == 'createlink' || command == 'insertimage') {
+                url = prompt('Enter the link here: ', 'http:\/\/');
+                document.execCommand($(this).data('command'), false, url);
+            }
+            else
+                document.execCommand($(this).data('command'), false, null);
+
+
+        });
+
+        setTimeout(function() {
+            div.focus();
+        }, 0);
+
+        function DoSubmit(){
+            {#            var content = $('#editor').html();#}
+{#                        document.getElementById('editor').remove();#}
+            var details= document.getElementById("editor").innerHTML;
+            document.getElementById('id_post_content').value = details;
+            return true;
+        }
+    </script>
+{% endblock %}

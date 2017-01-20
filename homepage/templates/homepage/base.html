@@ -4,6 +4,9 @@
 <head>
     <meta charset="utf-8">
     <title>Reply</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+
+
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.brown-red.min.css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
@@ -16,7 +19,7 @@
 <body>
 
 <div class="mdl-layout mdl-layout mdl-layout--no-desktop-drawer-button mdl-js-layout mdl-layout--fixed-header" style="direction: ltr;">
-    <header class="mdl-layout__header mdl-layout__header--scroll">
+    <header class="mdl-layout__header mdl-layout__header--scroll" id="header" >
         <div class="mdl-layout__header-row" style="direction: rtl;">
             <span style="font-family: Yekan; color: #fff; font-size:22px; font-weight: normal; margin: 20px"><a style="text-decoration: none;" class="mdl-js-button mdl-js-ripple-effect" href="{% url 'index' %}">ریپلای</a></span>
             <div class="mdl-layout-spacer"></div>
@@ -26,7 +29,6 @@
                 <a style="color: #fff; font-size:18px; font-weight: bold" class="mdl-navigation__link mdl-js-button mdl-js-ripple-effect" href="#">پر بازدید ترین ها</a>
             </nav>
         </div>
-
 
     </header>
     <div class="mdl-layout__drawer" style="background-color: darkcyan">
@@ -68,9 +70,10 @@
     </footer>
 </div>
 
+{#<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>#}
+{#<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>#}
 
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="{% static 'javascript/initial.js' %}"></script>
 <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
 <script type="text/javascript">
@@ -93,11 +96,11 @@
     }
     elements = document.getElementsByClassName("days_ago");
     for (var i = 0; i < elements.length; i++) {
-        {#            elements[i].style.backgroundColor="blue";#}
         value = elements[i].innerHTML;
         elements[i].innerHTML = value.toIndiaDigits();
     }
 </script>
+
 </body>
 
 </html>

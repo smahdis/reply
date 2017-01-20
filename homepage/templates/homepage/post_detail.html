@@ -2,65 +2,83 @@
 {% load my_tags %}
 {% load staticfiles %}
 {% block content %}
-          <div class="demo-ribbon" style="background-color: #3F51B5"></div>
-        <div class="content-grid mdl-grid demo-main">
-            <div class="no-margin mdl-card mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone mdl-shadow--2dp" style="background-color: {{ post.id|colorise }}">>
-                <div class="no-margin content-grid mdl-grid" >
-                    <div class="no-margin mdl-cell  mdl-cell--11-col mdl-cell--7-col-tablet mdl-cell--4-col-phone" >
-                        <div class="mdl-card__title">
-                            <h1 class="no-margin mdl-card__title-text">{{ post.post_title }}</h1>
-                        </div>
+    <div class="demo-ribbon mdl-color--cyan-A700"> </div>
+ {% load my_tags %}
+{% load staticfiles %}
+<div class="content-grid mdl-grid demo-main">
+    <div class="no-margin mdl-card mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone mdl-shadow--2dp" style="background-color: {{ post.id|colorise }}">
+        <div class="no-margin content-grid mdl-grid" >
+            <div class="no-margin mdl-cell  mdl-cell--11-col mdl-cell--8-col-tablet mdl-cell--4-col-phone" >
+                <div class="mdl-card__title" >
 
-                        <div class="mdl-card__supporting-text">
-                            <p id="post_content">{% autoescape on %} {{ post.post_content|linebreaksbr }} {% endautoescape %}</p>
-                        </div>
-                    </div>
-                    <div class="mdl-cell  mdl-cell--1-col mdl-cell--1-col-tablet mdl-cell--hide-phone vote_container">
-                        <button class="mdl-button mdl-js-button mdl-js-ripple-effect"><img class="icons" src="{% static 'img/upvote.svg' %}" alt="Upvote"></button>
-                        <div style="margin-top: 30px; margin-bottom: 30px; font-family: 'Segoe UI'; font-size: 24px; text-align: center; color: white">12</div>
-                        <button class="mdl-button mdl-js-button mdl-js-ripple-effect"><img class="icons" src="{% static 'img/downvote.svg' %}" alt="Upvote"></button>
-                    </div>
-
+                    <h1 class="no-margin mdl-card__title-text"><a class="mdl-js-button mdl-js-ripple-effect" href="{% url 'post_detail' pk=post.pk %}">{{ post.post_title }}</a></h1>
+                    <div class="mdl-layout-spacer"></div>
+                    <a style="color: #fff; font-size:18px; font-weight: normal;" class="mdl-js-button mdl-js-ripple-effect" href="{% url 'post_edit' pk=post.pk %}"><i class="material-icons">edit</i></a>
+                    {#                            <button style="" id="demo-menu-top-left{{ post.id }}" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">#}
+                    {#                                <i class="material-icons mdl-color-text--cyan-A400">more_vert</i>#}
+                    {#                            </button>#}
                 </div>
 
-                {#Post Footer#}
-                <div class="mdl-card__actions mdl-card--border">
-                    <img id="tt2" style="border-radius: 50%; margin-left: 10px; margin-right: 10px;" align="right" class="profile-pic media-object  img-circle" data-name="{{ post.poster.user.username }}"/>
+                <div class="mdl-card__supporting-text">
 
-                    {#Show Tooltip#}
-                    <div class="mdl-tooltip mdl-tooltip--large mdl-cell--hide-desktop mdl-cell--hide-tablet" for="tt2" >
-                        {{ post.poster.user.username }}
-                    </div>
+                    <p id="post_content">{{ post.post_content|safe|linebreaksbr }}</p>
 
-
-                    <div class="mdl-cell--hide-phone" style="font-size: 16px; color: #fff;">توسط:
-                        <h6 style="display: inline;">{{post.poster.user.username }}</h6> در
-                        <em class="days_ago">{{ post.created_date|pretty_date }}</em>
-                    </div>
-
-                    <div class="mdl-layout-spacer"></div>
-                    <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-cell--hide-desktop mdl-cell--hide-tablet"><img class="icons-small" src="{% static 'img/upvote.svg' %}" alt="Up vote"></button>
-                    <div class="mdl-cell--hide-desktop mdl-cell--hide-tablet" style="font-family: 'Segoe UI'; font-size: 18px; color: white">12</div>
-                    <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-cell--hide-desktop mdl-cell--hide-tablet"><img class="icons-small" src="{% static 'img/downvote.svg' %}" alt="Down vote"></button>
-                    <button class="mdl-button mdl-button--icon mdl-button--colored mdl-color-text--cyan-A400 mdl-cell--hide-phone"><i class="material-icons">favorite</i></button>
-                    <button class="mdl-button mdl-button--icon mdl-button--colored mdl-color-text--cyan-A400 mdl-cell--hide-phone"><i class="material-icons">share</i></button>
-
-                    <button id="demo-menu-top-left{{ post.id }}" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
-                        <i class="material-icons mdl-color-text--cyan-A400">more_vert</i>
-                    </button>
-
-
-                    <ul class="mdl-menu mdl-menu--top-left mdl-js-menu mdl-js-ripple-effect"
-                        data-mdl-for="demo-menu-top-left{{ post.id }}">
-                        <li class="mdl-menu__item">Some Action</li>
-                        <li class="mdl-menu__item">Another Action</li>
-                        <li class="mdl-menu__item">Disabled Action</li>
-                        <li disabled class="mdl-menu__item mdl-layout--large-screen-only">An Action</li>
-                        <li disabled class="mdl-menu__item--full-bleed-divider mdl-menu__item mdl-layout--small-screen-only">An Action</li>
-                        <li class="mdl-menu__item mdl-layout--small-screen-only">Yet Another Action</li>
-                        <li class="mdl-menu__item mdl-layout--small-screen-only">Yet Another Action</li>
-                    </ul>
                 </div>
             </div>
+            <div class="mdl-cell  mdl-cell--1-col mdl-cell--hide-tablet mdl-cell--hide-phone vote_container">
+                <button class="mdl-button mdl-js-button mdl-js-ripple-effect"><img class="icons" src="{% static 'img/upvote.svg' %}" alt="Upvote"></button>
+                <div style="margin-top: 30px; margin-bottom: 30px; font-family: 'Segoe UI'; font-size: 24px; text-align: center; color: white">12</div>
+                <button class="mdl-button mdl-js-button mdl-js-ripple-effect"><img class="icons" src="{% static 'img/downvote.svg' %}" alt="Upvote"></button>
+            </div>
+
         </div>
+
+        {#Post Footer#}
+        <div class="mdl-card__actions mdl-card--border">
+            <img id="tt{{ post.id }}" style="border-radius: 50%; margin-left: 10px; margin-right: 10px;" align="right" class="profile-pic media-object  img-circle" data-name="{{ post.poster.username }}"/>
+
+            {#Show Tooltip#}
+            <div class="mdl-tooltip mdl-tooltip--large mdl-cell--hide-desktop mdl-cell--hide-tablet" for="tt{{ post.id }}" >
+                {{ post.poster.username }}
+            </div>
+
+
+            <div style="font-size: 16px; color: #fff;">
+                <div style="display: inline" class="mdl-cell--hide-phone">
+                    <div style="display: inline">توسط:</div>
+                    <h6 style="display: inline;">{{post.poster.username }} - </h6>
+                </div>
+                <em class="days_ago">&#8236; {{ post.created_date|pretty_date }}</em>
+            </div>
+
+            <div class="mdl-layout-spacer"></div>
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-cell--hide-desktop"><img class="icons-small" src="{% static 'img/upvote.svg' %}" alt="Up vote"></button>
+            <div class="mdl-cell--hide-desktop" style="font-family: 'Segoe UI'; font-size: 18px; color: white">12</div>
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-cell--hide-desktop"><img class="icons-small" src="{% static 'img/downvote.svg' %}" alt="Down vote"></button>
+            <button class="mdl-button mdl-button--icon mdl-button--colored mdl-color-text--cyan-A400 mdl-cell--hide-phone"><i class="material-icons">star</i></button>
+            <button class="mdl-button mdl-button--icon mdl-button--colored mdl-color-text--cyan-A400 mdl-cell--hide-phone"><i class="material-icons">share</i></button>
+
+            <button id="demo-menu-top-left{{ post.id }}" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
+                <i class="material-icons mdl-color-text--cyan-A400">more_vert</i>
+            </button>
+
+
+            <ul class="mdl-menu mdl-menu--top-left mdl-js-menu mdl-js-ripple-effect"
+                data-mdl-for="demo-menu-top-left{{ post.id }}">
+                <li class="mdl-menu__item">Some Action</li>
+                <li class="mdl-menu__item">Another Action</li>
+                <li class="mdl-menu__item">Disabled Action</li>
+                <li disabled class="mdl-menu__item mdl-layout--large-screen-only">An Action</li>
+                <li disabled class="mdl-menu__item--full-bleed-divider mdl-menu__item mdl-layout--small-screen-only">An Action</li>
+                <li class="mdl-menu__item mdl-layout--small-screen-only">Yet Another Action</li>
+                <li class="mdl-menu__item mdl-layout--small-screen-only">Yet Another Action</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+    <script>
+        var id = document.getElementById("header");
+        id.classList.add("mdl-color--cyan-A700");
+    </script>
 {% endblock %}

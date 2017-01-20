@@ -21,7 +21,7 @@
     font-style: normal;
 }
 
-html, body {
+body {
     font-family: 'Yekan','Roboto', 'Helvetica', sans-serif;
     direction: rtl;
     background-color:  #9ad9f9
@@ -29,6 +29,29 @@ html, body {
 
 .content-grid{
     max-width: 960px;
+
+}
+#inner {
+    width: 600px;
+    margin: 0 auto;
+}
+
+.formEdit{
+    direction: rtl;
+    text-align: right;
+    font-family: 'Yekan', 'Roboto', 'Helvetica', sans-serif;
+    width: 600px;
+    font-size: large;
+
+}
+
+/*fonts and some other public styles*/
+.generalClass
+{
+    font-family: 'Yekan', 'Roboto', 'Helvetica', sans-serif;
+    direction: rtl;
+    color: #fff;
+    font-size: 18px;
 }
 
 .page-content{
@@ -73,6 +96,16 @@ html, body {
     display: inline-block;
 }
 
+.mdl-card__supporting-text a:link, a:visited {
+    /*background-color: transparent;*/
+    color: #fff;
+    text-decoration: underline;
+    /*padding: 10px 20px;*/
+    /*text-align: center;*/
+    /*text-decoration: none;*/
+    /*display: inline-block;*/
+}
+
 .mdl-card__title a:hover, a:active {
     /*background-color: green;*/
     /*color: white;*/
@@ -104,3 +137,98 @@ html, body {
 }
 
 H1 {display: inline;}
+
+
+
+.demo-header .mdl-layout__header-row {
+    padding-left: 40px;
+}
+
+.demo-container {
+    max-width: 1600px;
+    width: calc(100% - 16px);
+    margin: 0 auto;
+}
+
+.demo-content {
+    border-radius: 2px;
+    padding: 80px 56px;
+    margin-bottom: 80px;
+}
+
+.demo-layout.is-small-screen .demo-content {
+    padding: 40px 28px;
+}
+
+.demo-content h3 {
+    margin-top: 48px;
+}
+
+.demo-footer {
+    padding-left: 40px;
+}
+
+.demo-footer .mdl-mini-footer--link-list a {
+    font-size: 13px;
+}
+
+
+
+
+
+
+#editor {
+    box-shadow: 0 0 2px #CCC;
+    min-height: 150px;
+        line-height: 200%;
+
+    /*overflow: auto;*/
+    /*padding: 1em;*/
+    /*margin-top: 20px;*/
+    resize: vertical;
+    /*outline: none;*/
+}
+
+.toolbar {
+    text-align: left;
+    background-color: darkturquoise;
+    padding-left: 20px;
+    direction: ltr;
+}
+
+.toolbar a {
+    /*border: 1px solid #AAA;*/
+    /*background: #FFF;*/
+    /*width: 1.5em;*/
+    display: inline-block;
+    /*text-decoration: none;*/
+    margin:10px 5px 5px 0px;
+}
+
+.toolbar a:hover{
+    background-color: darkcyan;
+    color: #8c8c8c;
+}
+
+a[data-command='redo'],
+a[data-command='strikeThrough'],
+a[data-command='justifyFull'],
+a[data-command='insertOrderedList'],
+a[data-command='outdent'],
+a[data-command='p'],
+a[data-command='superscript'] {
+    margin-right: 5px;
+    border-radius: 0 3px 3px 0;
+}
+
+a[data-command='undo'],
+.fore-wrapper,
+a[data-command='justifyLeft'],
+a[data-command='insertUnorderedList'],
+a[data-command='indent'],
+a[data-command='h1'],
+a[data-command='subscript'] {
+    border-radius: 3px 0 0 3px;
+}
+
+.material-icons.md-48 { font-size: 48px; }
