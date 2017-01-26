@@ -10,7 +10,7 @@ from taggit.managers import TaggableManager
 
 @python_2_unicode_compatible
 class Post(models.Model):
-    poster = models.ForeignKey('auth.user')
+    poster = models.ForeignKey('auth.User')
     question = models.ForeignKey('self', null=True, blank=True)
 
     post_title = models.CharField(max_length=300)
@@ -61,10 +61,17 @@ class Profile(models.Model):
     def save_user_profile(sender, instance, **kwargs):
         instance.profile.save()
 
-    @classmethod
-    def create(cls, title):
-        book = cls(title=title)
-        # do something with the book
-        return book
+    # @classmethod
+    # def create(cls, title):
+    #     book = cls(title=title)
+    #     # do something with the book
+    #     return book
     def __str__(self):
         return self.user.username
+
+class Authenticate(models.Model):
+    mobile_number = models.CharField(max_length=20)
+    authentication_id = models.CharField(max_length=20)
+    created_date = models.DateTimeField(default=timezone.now)
+    def __str__(self):
+        return self.mobile_number

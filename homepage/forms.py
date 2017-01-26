@@ -32,6 +32,8 @@ class PostForm(forms.ModelForm):
         #Check date is not in past.
         if data.__len__() < 1:
             raise ValidationError('لطفا حداقل یک تگ وارد کنید.')
+        if data.__len__() < 3:
+            raise ValidationError('تگ انتخاب شده میبایست حداقل 3 حرف باشد.')
         # Remember to always return the cleaned data.
         return data
 
@@ -43,3 +45,15 @@ class PostForm(forms.ModelForm):
                                     settings.BLEACH_VALID_ATTRS,
                                     settings.BLEACH_VALID_STYLES)
         return cleaned_text #sanitize html
+
+class RegisterNewUser(forms.Form):
+    phone_number = forms.CharField(error_messages={'required': 'شماره تلفن همراه خود را وارد نمایید'}, required=False)
+    authentication_code = forms.CharField(error_messages={'required': 'شماره کد ارسال شده به شماره همراه شما را وارد نمایید'}, required=False)
+    username = forms.CharField(error_messages={'required': 'لطفا یک نام کاربری وارد نمایید'}, required=False)
+
+    def clean_phone_number(self):
+        data = self.cleaned_data['phone_number']
+        if data.__len__() < 1:
+            raise ValidationError('لطفا حداقل یک تگ وارد کنید.')
+        # Remember to always return the cleaned data.
+        return data

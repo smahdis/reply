@@ -1,7 +1,7 @@
 {% load my_tags %}
 {% load staticfiles %}
 <div class="content-grid mdl-grid">
-    <div class="no-margin mdl-card mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone mdl-shadow--2dp" style="background-color: {{ post.id|colorise }}">
+    <div class="no-margin mdl-card mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone mdl-shadow--4dp" style="background-color: {{ post.id|colorise }}">
         <div class="no-margin content-grid mdl-grid" >
             <div class="no-margin mdl-cell  mdl-cell--11-col mdl-cell--8-col-tablet mdl-cell--4-col-phone" >
                 <div class="mdl-card__title" >
@@ -16,9 +16,25 @@
 
                 <div class="mdl-card__supporting-text">
                     {% autoescape on %}
-                    <p id="post_content">{{ post.post_content|trim_end|safe }}</p>
+{#                        <p id="post_content">{{ post.post_content|trim_end|striptags }}</p>#}
+                        <p id="post_content">{{ post.post_content|truncatewords_html:30|striptags }}</p>
                     {% endautoescape %}
                 </div>
+
+                <div class="mdl-card__supporting-text">
+                    {% autoescape on %}
+                        {% for tag in post.return_tags %}
+                            {% if tag|colorise != post.id|colorise %}
+                                <a class="tags mdl-js-button mdl-js-ripple-effect" style="background-color: {{ tag|colorise }}; text-decoration: none;" href="#">{{ tag }} </a>
+                            {% else %}
+                                {% with newtag=tag|add:"15" %}
+                                    <a class="tags mdl-js-button mdl-js-ripple-effect" style="background-color: {{ newtag|colorise }}; text-decoration: none;" href="#">{{ tag }} </a>
+                                {% endwith %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endautoescape %}
+                </div>
+
             </div>
             <div class="mdl-cell  mdl-cell--1-col mdl-cell--hide-tablet mdl-cell--hide-phone vote_container">
                 <button class="mdl-button mdl-js-button mdl-js-ripple-effect"><img class="icons" src="{% static 'img/upvote.svg' %}" alt="Upvote"></button>
@@ -39,11 +55,11 @@
 
 
             <div style="font-size: 16px; color: #fff;">
+                <em class="days_ago">&#8236; {{ post.created_date|pretty_date }}</em>
                 <div style="display: inline" class="mdl-cell--hide-phone">
                     <div style="display: inline">توسط:</div>
-                    <h6 style="display: inline;">{{post.poster.username }} - </h6>
+                    <h6 style="display: inline;">{{post.poster.username }}</h6>
                 </div>
-                <em class="days_ago">&#8236; {{ post.created_date|pretty_date }}</em>
             </div>
 
             <div class="mdl-layout-spacer"></div>

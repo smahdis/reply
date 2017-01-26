@@ -1,8 +1,41 @@
 {% extends 'homepage/base.html' %}
 {% load my_tags %}
 {% load staticfiles %}
+
+
 {% block content %}
     {% for post in posts %}
         {% include "homepage/post.html" %}
     {% endfor %}
+{% endblock %}
+
+
+
+{% block javascript %}
+<script src="{% static 'javascript/initial.js' %}"></script>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('.profile-pic').initial({
+            height: 32,
+            width: 32,
+            fontSize: 16,
+            fontFamily: 'sans-serif',
+
+        });
+    });
+</script>
+    <script>
+        String.prototype.toIndiaDigits= function(){
+            var id= ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+            return this.replace(/[0-9]/g, function(w){
+                return id[+w]
+            });
+        }
+        elements = document.getElementsByClassName("days_ago");
+        for (var i = 0; i < elements.length; i++) {
+            value = elements[i].innerHTML;
+            elements[i].innerHTML = value.toIndiaDigits();
+        }
+    </script>
 {% endblock %}
