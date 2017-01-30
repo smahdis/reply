@@ -50,7 +50,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'homepage.middleware.MobileMiddleware.MobileDetectionMiddleware',
 ]
+
 
 ROOT_URLCONF = 'Reply.urls'
 
@@ -115,7 +117,7 @@ AUTH_PASSWORD_VALIDATORS = [
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'homepage.auth_backend.PasswordlessAuthBackend',
-)
+    )
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/

@@ -89,3 +89,8 @@ def colorise(id):
     colorNum = abs(id%colorList.__len__())
     return colorList[colorNum]
 
+@register.filter
+def xstr(s):
+    if s is None:
+        return ''
+    return str(s)

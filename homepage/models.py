@@ -14,7 +14,7 @@ class Post(models.Model):
     question = models.ForeignKey('self', null=True, blank=True)
 
     post_title = models.CharField(max_length=300)
-    post_content = models.TextField()
+    post_content = models.TextField(null=True, blank=True)
 
     votes = models.IntegerField(null=True, blank=True)
     views = models.IntegerField(null=True, blank=True)
@@ -27,6 +27,8 @@ class Post(models.Model):
     created_date = models.DateTimeField(
             default=timezone.now)
     published_date = models.DateTimeField(
+            blank=True, null=True)
+    date_modified = models.DateTimeField(
             blank=True, null=True)
 
     tags = TaggableManager()
@@ -75,3 +77,14 @@ class Authenticate(models.Model):
     created_date = models.DateTimeField(default=timezone.now)
     def __str__(self):
         return self.mobile_number
+
+
+@python_2_unicode_compatible
+class Vote(models.Model):
+    user = models.ForeignKey('auth.User')
+    post = models.ForeignKey('Post')
+    vote_type = models.SmallIntegerField()#NullBooleanField(null=True)
+    date_voted = models.DateTimeField(
+            default=timezone.now)
+    def __str__(self):
+        return self.user

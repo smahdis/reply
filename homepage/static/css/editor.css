@@ -1,0 +1,52 @@
+.toolbar {
+    /*margin-top: 20px;*/
+
+    text-align: left;
+    background-color: #fff;
+    /*padding-left: 20px;*/
+    direction: ltr;
+    display: inline;
+    max-width: 700px;
+}
+
+
+.toolbar a{
+    /*border: 1px solid black;*/
+    width: 36px;
+    height: 36px;
+    text-align: center;
+    background-color: white;
+    display: inline-block;
+    color: black;
+}
+
+.toolbar a:hover, a:active{
+    background-color: lightblue;
+    color: darkblue;
+}
+.toolbar a:after {
+    display: inline-block;
+    vertical-align: middle;
+    content: "";
+    height: 100%;
+}
+
+.editor {
+    /*box-shadow: 0 0 2px #CCC;*/
+    min-height: 500px;
+    line-height: 200%;
+    resize: vertical;
+    padding: 40px;
+    font-family: 'Yekan', 'Roboto', 'Helvetica', sans-serif;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+}
+
+.bottom-margin{
+    margin-bottom: 20px;
+}
+
+.top-margin{
+    margin-top:30px;
+}

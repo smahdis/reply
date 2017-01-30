@@ -1,9 +1,81 @@
 {% extends 'homepage/base.html' %}
 {% load staticfiles %}
-
 {% load my_tags %}
+{% block css %}
 
-{#{% load staticfiles %}#}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{% static 'css/registration/registration.css' %}">
+
+{% endblock %}
+{% block content %}
+    <form method="post" id="test1">
+
+        <div class="panel panel-default box-container" style="margin: 10px auto; text-align: center;">
+            <div class="mdl-card__title"></div>
+            {#            <div class="box">#}
+            <div class="mdl-card__supporting-text box">
+                <div id="first_step">
+                    <p class="mdl-card__supporting-text" style="color: black">
+                        لطفا جهت ورود یا ثبت نام, شماره همراه خود را وارد نمایید.
+                    </p>
+                    {#                    <input class="textbox" type="text" placeholder="09xxxxxxxxx" name="{{ form.phone_number.name }}" id="id_{{ form.phone_number.name }}" value="" >#}
+                    <div class="input-group" style="direction:ltr; max-width:300px; margin: 20px auto;">
+                        <span class="input-group-addon"><i class="fa fa-key fa-mobile"></i></span>
+                        <input class="form-control" type="text" placeholder="09xxxxxxxxx" name="{{ form.phone_number.name }}" id="id_{{ form.phone_number.name }}" value="">
+                    </div>
+                </div>
+
+                <div id="second_step" style="display:none;">
+                    <div>
+                        <a class="btn btn-info" href="#" id="edit_phone"><i class="fa fa-pencil"></i></a>
+                    </div>
+
+                    <div style="margin-top: 20px;"></div>
+                    <div>
+                        لطفا کد شش رقمی ارسال شده به شماره همراه خود را وارد نمایید.
+                    </div>
+
+
+
+                    <div style="margin-top: 20px;"></div>
+                    {#                    <input class="textbox" type="text" placeholder="کد شش رقمی ارسال شده به شماره شما" name="{{ form.authentication_code.name }}" id="id_{{ form.authentication_code.name }}" value="" >#}
+                    <div class="input-group" style="direction:ltr; max-width:300px; margin: 20px auto;">
+                        <span class="input-group-addon"><i class="fa fa-key fa-mobile"></i></span>
+                        <input class="form-control" type="text" placeholder="کد شش رقمی ارسال شده به شماره شما" name="{{ form.authentication_code.name }}" id="id_{{ form.authentication_code.name }}" value="">
+                    </div>
+                </div>
+
+                <div style="margin: 20px;" id="error_message">
+                    <p style="color: red"></p>
+                </div>
+
+            </div>
+
+
+
+
+
+
+
+
+            <div class="mdl-card__actions mdl-card--border">
+                <div style="margin: 10px auto; text-align: center;">
+
+                    <button class="btn btn-success" style="min-width: 200px; text-align: center" type="submit">
+                        {#                        <div id="loading"></div>#}
+                        <div id="submit_text">
+                            <i id="loading" class="fa fa-cog fa-spin fa-lg fa-fw"></i>
+                            ثبت</div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock %}
+
+
+
+
 {% block javascript %}
     <script type="text/javascript">
         $(document).ready(function() {
@@ -20,6 +92,7 @@
 
             error_message.hide();
             loading.hide();
+
             $("#test1").submit(function(event){
                 event.preventDefault();
                 error_message.hide();
@@ -36,8 +109,8 @@
                         success: function (data) {
                             if (data.matched) {
                                 error_message.show();
-                                error_message.html('<i style="margin-left: 15px; margin-top: 20px" class="material-icons">warning</i>' + data.authentication_id);
-                                edit_phone.html('<i class="material-icons md-dark md-18">edit</i> ' + data.number);
+                                error_message.html('<i style="margin-left: 15px; margin-top: 20px" class="fa fa-warning"></i>' + data.authentication_id);
+                                edit_phone.html('<i class="fa fa-pencil" style="margin-left: 10px"></i> ' + '  ' + data.number);
 
                                 first_div.hide();
                                 second_div.show();
@@ -45,13 +118,15 @@
                             else
                             {
                                 error_message.show();
-                                error_message.html('<i style="margin-left: 15px; margin-top: 20px" class="material-icons">warning</i> لطفا اطلاعات صحیح وارد نمایید.');
+                                error_message.html('<i style="margin-left: 15px; margin-top: 20px" class="fa fa-warning"></i> لطفا اطلاعات صحیح وارد نمایید.');
                             }
                             submit_text.removeClass("wrapper");
                             loading.hide();
                         },
                         error: function(data) {
-                            alert("error " + data.is_taken);
+                            {#                            alert("error " + data.is_taken);#}
+                            error_message.show();
+                            error_message.html('<i style="margin-left: 15px; margin-top: 20px" class="fa fa-warning"></i> اشکال در ورود کد 42');
                             submit_text.removeClass("wrapper");
                             loading.hide();
                         }
@@ -69,23 +144,24 @@
                         },
                         dataType: 'json',
                         success: function (data) {
-                                                            error_message.show();
-                                error_message.html('<i style="margin-left: 15px; margin-top: 20px" class="material-icons">check</i>' + data.verified);
+                            error_message.show();
+                            error_message.html('<i style="margin-left: 15px; margin-top: 20px" class="fa fa-check"></i>' + data.verified);
                             if (data.logged_in) {
-{#                                error_message.show();#}
-                                error_message.html('<i style="margin-left: 15px; margin-top: 20px" class="material-icons">check</i>' + 'logged in ' + data.logged_in);
+                                {#                                error_message.show();#}
+                                error_message.html('<i style="margin-left: 15px; margin-top: 20px" class="fa fa-check"></i>' + 'logged in ' + data.logged_in);
                                 window.location.href = data.redirect;
                             }
                             else
                             {
                                 error_message.show();
-                                error_message.html('<i style="margin-left: 15px; margin-top: 20px" class="material-icons">warning</i> کد وارد شده توسط شما اشتباه است.');
+                                error_message.html('<i style="margin-left: 15px; margin-top: 20px" class="fa fa-warning"></i> کد وارد شده توسط شما اشتباه است.');
                             }
                             submit_text.removeClass("wrapper");
                             loading.hide();
                         },
                         error: function(data) {
-                            alert("error ");
+                            error_message.show();
+                            error_message.html('<i style="margin-left: 15px; margin-top: 20px" class="fa fa-warning"></i> اشکال در ورود کد 43');
                             submit_text.removeClass("wrapper");
                             loading.hide();
                         }
@@ -103,102 +179,5 @@
             });
 
         });
-
-
-
     </script>
-{% endblock %}
-
-
-{% block content %}
-    <form method="post" id="test1">
-
-        <div class="demo-card-wide mdl-card mdl-shadow--2dp " style="margin: 10px auto; text-align: center;">
-            <div class="mdl-card__title"></div>
-            {#            <div class="box">#}
-            <div class="mdl-card__supporting-text box">
-                <div id="first_step">
-                    <p class="mdl-card__supporting-text" style="color: black">
-                        لطفا جهت ورود یا ثبت نام, شماره همراه خود را وارد نمایید.
-                    </p>
-                    <input class="textbox" type="text" placeholder="09xxxxxxxxx" name="{{ form.phone_number.name }}" id="id_{{ form.phone_number.name }}" value="" >
-                </div>
-
-                <div id="second_step" style="display:none;">
-                    <div>
-                        لطفا کد شش رقمی ارسال شده به شماره همراه خود را وارد نمایید.
-                    </div>
-                    <div style="margin-top: 20px;"></div>
-
-                    <div>
-                        <a style="color: #000;" class="mdl-js-button mdl-js-ripple-effect" href="#"  id="edit_phone"><i class="material-icons md-dark md-18">edit</i></a>
-                    </div>
-                    <div style="margin-top: 20px;"></div>
-                    <input class="textbox" type="text" placeholder="کد شش رقمی ارسال شده به شماره شما" name="{{ form.authentication_code.name }}" id="id_{{ form.authentication_code.name }}" value="" >
-                </div>
-
-                <div style="margin: 20px;" id="error_message">
-                    <p style="color: red"></p>
-                </div>
-
-            </div>
-
-
-
-            <div class="mdl-card__actions mdl-card--border">
-                <div style="margin: 10px auto; text-align: center;">
-
-                    <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-color--light-blue-400 generalClass" style="min-width: 200px; text-align: center" type="submit">
-                        <div class="wrapper2 loader" id="loading"></div>
-                        <div id="submit_text">ثبت</div>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </form>
-
-    <!-- Wide card with share menu button -->
-    <style>
-        .demo-card-wide.mdl-card {
-            width: 512px;
-        }
-        .demo-card-wide > .mdl-card__menu {
-            color: #fff;
-        }
-        .loader {
-            border: 2px solid #f3f3f3; /* Light grey */
-            border-top: 2px solid #3498db; /* Blue */
-            border-radius: 50%;
-            width: 16px;
-            height: 16px;
-            animation: spin 2s linear infinite;
-        }
-        @-webkit-keyframes spin {
-            0% { -webkit-transform: rotate(0deg); }
-            100% { -webkit-transform: rotate(360deg); }
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .wrapper {
-            position: absolute;
-            top: 25%;
-            left: 50%;
-            margin-top: -10px;
-            margin-left: -5px;
-        }
-        .wrapper2 {
-            position: absolute;
-            top: 25%;
-            left: 50%;
-            margin-left: -50px;
-        }
-
-
-
-
-    </style>
-
 {% endblock %}

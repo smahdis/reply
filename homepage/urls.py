@@ -3,7 +3,6 @@ from . import views
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
-    # url(r'^$', views.post_list, name='post_list.html'),
     url(r'^$', views.index, name='index'),
     url(r'^question/(?P<pk>\d+)/$', views.post_detail, name='post_detail'),
     url(r'^post/new/$', views.post_new, name='post_new'),
@@ -14,4 +13,6 @@ urlpatterns = [
     url(r'^dashboard/$', views.dashboard, name='dashboard'),
     url(r'^ajax/validate_username/$', views.validate_username, name='validate_username'),
     url(r'^ajax/validate_phone_number/$', views.validate_phone_number, name='validate_phone_number'),
+    url(r'^ajax/upvote/$', views.upvote, name='upvote'),
+    # url(r'^ajax/downvote/$', views.validate_phone_number, name='validate_phone_number'),
 ]

@@ -32,9 +32,17 @@ class PostForm(forms.ModelForm):
         #Check date is not in past.
         if data.__len__() < 1:
             raise ValidationError('لطفا حداقل یک تگ وارد کنید.')
-        if data.__len__() < 3:
-            raise ValidationError('تگ انتخاب شده میبایست حداقل 3 حرف باشد.')
-        # Remember to always return the cleaned data.
+        # if data.__len__() < 3:
+        #     raise ValidationError('تگ انتخاب شده میبایست حداقل 3 حرف باشد.')
+        return data
+
+    def clean_post_title(self):
+        data = self.cleaned_data['post_title']
+        #Check date is not in past.
+        if data.__len__() < 1:
+            raise ValidationError('لطفا عنوان سئوال را وارد نمایید')
+        if data.__len__() < 10:
+            raise ValidationError('عنوان سئوال شما می بایست به اندازه کافی طولانی باشد')
         return data
 
     def clean_post_content(self):

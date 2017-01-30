@@ -1,0 +1,122 @@
+
+
+
+.post_container{
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.19);
+    /*text-align: center;*/
+    margin-top: 0px;
+    /*padding:20px;*/
+}
+
+.post_container .post_title_content{
+    /*padding:10px;*/
+    padding: 10px 20px 10px 0px;
+}
+
+.post_container .post_vote_plus_content{
+    padding-left:25px;
+}
+
+/*vote buttons without background*/
+.post_container button{
+    background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none;
+    cursor:pointer;
+    overflow: hidden;
+    outline:none;
+}
+
+.post_container .vote-container{
+    margin-top: 30px; padding: 0px;
+}
+
+.display-inline
+{
+    display: inline-block;
+}
+
+.display-block{
+    display: block;
+}
+
+.post_title a{
+    color: #fff;
+}
+
+.post_title h1{
+    color: #fff;
+    font-size:24px;
+}
+
+#post_content{
+    /*font-size: 18px;*/
+    text-align: justify;
+    color: white;
+}
+
+.tags{
+    padding: 5px;
+    display: inline-block;
+    color: white;
+    font-size: smaller;
+    margin:3px;
+}
+
+.tags-container-padding{
+    padding:10px 20px;
+}
+
+/*Post footer align vertically*/
+.post-footer {
+    /*display: flex;*/
+    /*justify-content: center; !* align horizontal *!*/
+    align-items: center; /* align vertical */
+}
+
+.panel-footer-border{
+    border-top: 1px solid rgb(127, 0, 0);
+    border-top: 1px solid rgba(36, 36, 36, .1);
+    -webkit-background-clip: padding-box; /* for Safari */
+    background-clip: padding-box; /* for IE9+, Firefox 4+, Opera, Chrome */
+}
+
+.icons-large{
+    width:64px;
+    height:64px
+}
+
+.icons{
+    width:32px;
+    height:32px;
+    background-color: transparent;
+}
+
+.icons-small{
+    width:24px;
+    height:24px
+}
+.icons-xsmall{
+    width:16px;
+    height:16px
+}
+
+
+tag-fix {
+    text-shadow: 0 0 0;
+}
+
+
+
+
+.animate{
+    -webkit-animation:spin 0.5s linear 1;
+    -moz-animation:spin 0.5s linear 1;
+    animation:spin 0.5s linear 1;
+}
+
+
+
+@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }

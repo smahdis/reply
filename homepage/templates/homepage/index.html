@@ -1,0 +1,78 @@
+{% extends 'homepage/base.html' %}
+{% load my_tags %}
+{% load staticfiles %}
+{% block css %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Arvo">
+    <link rel="stylesheet" href="{% static 'css/post.css' %}">
+{% endblock %}
+
+{% block content %}
+    {% for post in posts %}
+        {% include "homepage/posts/post.html" %}
+    {% endfor %}
+{% endblock %}
+
+{% block javascript %}
+    <script src="{% static 'javascript/initial.js' %}"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('.profile-pic').initial({
+                height: 24,
+                width: 24,
+                fontSize: 14,
+                fontFamily: 'sans-serif',
+            });
+        });
+    </script>
+    <script>
+        String.prototype.toIndiaDigits= function(){
+            var id= ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+            return this.replace(/[0-9]/g, function(w){
+                return id[+w]
+            });
+        }
+        elements = document.getElementsByClassName("days_ago");
+        for (var i = 0; i < elements.length; i++) {
+            value = elements[i].innerHTML;
+            elements[i].innerHTML = value.toIndiaDigits();
+        }
+    </script>
+
+
+    <script>
+        $(document).ready(function(){
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
+
+
+
+
+    <script>
+        $(document).ready(function() {
+            $('.vote-c').click(function(event) {
+                pk = $(this).val();
+                vote_type = $(this).attr("vote_type");
+                $.ajax({
+                    url: '/ajax/upvote/',
+                    data: {
+                        'pk': pk,
+                        'vote_type': vote_type
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        $("#number_of_votes").html(data.number_of_votes);
+                    },
+                    error: function (data) {
+                        alert("error " + data.created);
+
+                    }
+                });
+                return true;
+            });
+        });
+
+    </script>
+{% endblock %}
