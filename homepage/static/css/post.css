@@ -1,5 +1,7 @@
 
-
+a:link{
+    text-decoration: none;
+}
 
 .post_container{
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.19);
@@ -33,7 +35,7 @@
 
 .display-inline
 {
-    display: inline-block;
+    display: inline;
 }
 
 .display-block{
@@ -106,9 +108,14 @@ tag-fix {
     text-shadow: 0 0 0;
 }
 
+.default-padding{
+    padding: 20px;
+}
 
-
-
+.default-padding-righ-left-10{
+    padding-right: 10px;
+    padding-left: 10px;
+}
 .animate{
     -webkit-animation:spin 0.5s linear 1;
     -moz-animation:spin 0.5s linear 1;

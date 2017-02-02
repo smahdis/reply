@@ -1,13 +1,13 @@
 
-@font-face {
-    font-family: 'BTitr';
-    src: url('fonts/BTitr.eot');
-    src: url('fonts/BTitr.eot?#iefix') format('embedded-opentype'),
-    url('fonts/BTitr.woff') format('woff'),
-    url('fonts/BTitr.ttf') format('truetype');
-    font-weight: bold;
-    font-style: normal;
-}
+/*@font-face {*/
+    /*font-family: 'BTitr';*/
+    /*src: url('fonts/BTitr.eot');*/
+    /*src: url('fonts/BTitr.eot?#iefix') format('embedded-opentype'),*/
+    /*url('fonts/BTitr.woff') format('woff'),*/
+    /*url('fonts/BTitr.ttf') format('truetype');*/
+    /*font-weight: bold;*/
+    /*font-style: normal;*/
+/*}*/
 
 
 @font-face {
@@ -17,6 +17,16 @@
     url('fonts/Yekan.woff?-wwn5ej') format('woff'),
     url('fonts/Yekan.ttf?-wwn5ej') format('truetype'),
     url('fonts/Yekan.svg?-wwn5ej#icomoon') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Vazir';
+    src: url('fonts/Vazir-FD.eot?-wwn5ej');
+    src: url('fonts/Vazir-FD.eot?#iefix-wwn5ej') format('embedded-opentype'),
+    url('fonts/Vazir-FD.woff?-wwn5ej') format('woff'),
+    url('fonts/Vazir-FD.ttf?-wwn5ej') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
@@ -32,17 +42,17 @@ body, .navbar-default{
   outline: none;
 }
 
-direction-ltr{
-    direction: rtl;
+.direction-ltr{
+    direction: ltr;
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-family: 'Yekan', 'Roboto', 'Helvetica', sans-serif;
+    font-family: 'Vazir', 'Yekan', 'Tahoma', 'Roboto', 'Helvetica', sans-serif;
     direction: rtl;
 
 }
 p, div {
-    font-family: 'Yekan','Roboto', 'Helvetica', sans-serif;
+    font-family: 'Vazir', 'Yekan', 'Tahoma','Roboto', 'Helvetica', sans-serif;
     direction: rtl;
 
 }

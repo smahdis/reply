@@ -18,7 +18,7 @@ class MobileDetectionMiddleware(MiddlewareMixin):
             agent = mdetect.UAgentInfo(userAgent=user_agent, httpAccept=http_accept)
             is_tablet = agent.detectTierTablet()
             is_phone = agent.detectTierIphone()
-            is_mobile = is_tablet or is_phone or agent.detectMobileQuick()
+            is_mobile = is_phone or agent.detectMobileQuick()
 
         request.is_mobile = is_mobile
         request.is_tablet = is_tablet

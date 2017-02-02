@@ -16,15 +16,41 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, Sum
+from django.db.models.functions import Coalesce
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+import constants
+from homepage.templatetags import my_tags
 
 def index(request):
     posts = Post.objects.filter(created_date__lte=timezone.now(), is_question=1, is_published=1).order_by('-created_date')
-    return render(request, 'homepage/index.html', {'posts': posts})
+    paginator = Paginator(posts, constants.QUESTIONS_PER_PAGE)
+    page = request.GET.get('page')
+    try:
+        paged_posts = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        paged_posts = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        paged_posts = paginator.page(paginator.num_pages)
+    return render(request, 'homepage/index.html', {'posts': paged_posts})
+
 
 def post_detail(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    answers = Post.objects.filter(is_question=0, question_id__exact=pk, is_published=1).order_by('-created_date')
-    return render(request, 'homepage/posts/post_detail.html', {'post': post, 'answers': answers})
+    post = get_object_or_404(Post, pk=pk, is_question=1)
+    answers = Post.objects.filter(is_question=0, question_id__exact=pk, is_published=1).order_by('created_date')
+    paginator = Paginator(answers, constants.ANSWERS_PER_PAGE)
+    page = request.GET.get('page')
+    try:
+        paged_answers = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        paged_answers = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        paged_answers = paginator.page(paginator.num_pages)
+    return render(request, 'homepage/posts/post_detail.html', {'post': post, 'answers': paged_answers})
+
 @login_required()
 def post_new(request):
     if request.method == "POST":
@@ -82,7 +108,6 @@ def validate_username(request):
             matched = True
         else:
             matched = False
-        logger.debug("this is a debug message!")
 
     data = {
         'matched': matched,#User.objects.filter(username__iexact=username).exists()
@@ -148,33 +173,96 @@ def logout_view(request):
 
 @login_required
 def dashboard(request):
-    return render(request, 'homepage/dashboard.html')
+    posts = Post.objects.filter(created_date__lte=timezone.now(), is_question=1, is_published=1, poster=request.user).order_by('-created_date')[:10]
+    answers = Post.objects.filter(is_question=0, is_published=1, poster=request.user).order_by('-created_date')[:10]
+    votes = Vote.objects.filter(post__poster=request.user).filter(~Q(vote_type = 0)).aggregate(vote_num=Coalesce(Sum('vote_type'),0))
+
+    return render(request, 'homepage/dashboard.html', {'posts': posts, 'answers': answers, 'votes': votes.get('vote_num')})
 
 
 @login_required()
-def upvote(request):
+def vote(request):
     check_time = timezone.datetime.now() - timezone.timedelta(hours=24)
     dt_aware = timezone.make_aware(check_time, timezone.get_current_timezone())
     pk = request.GET.get('pk', None)
-    vt =  request.GET.get('vote_type', None)
+    vt = request.GET.get('vote_type', None)
     post = get_object_or_404(Post, pk=pk)
-    try:
-        v = Vote.objects.get(user=request.user, post=post,date_voted__gte = dt_aware)
-        if v:
-            if v.vote_type == int(vt):
-                vt=0
-    except Vote.DoesNotExist:
-        print >> sys.stderr, "vote didn't exist previously"
-            
-    vote_date = timezone.now()
-    vote, created = Vote.objects.update_or_create(user=request.user, post=post,date_voted__gte = dt_aware, defaults={'date_voted': vote_date, 'vote_type':vt})
-    number_of_votes = Vote.objects.filter(post=post).filter(~Q(vote_type = 0)).aggregate(vote_num=Sum('vote_type'))
-    # print >> sys.stderr, number_of_votes
-    # print >> sys.stderr, number_of_votes.get('vote_num')
-    print >> sys.stderr, request.is_tablet
-    print >> sys.stderr, request.is_phone
-    print >> sys.stderr, request.is_mobile
+    number_of_votes = 0
+    if request.user.is_authenticated:
+        error = False
+        if not post.poster==request.user:
+            try:
+                v = Vote.objects.get(user=request.user, post=post,date_voted__gte = dt_aware)
+                if v:
+                    if v.vote_type == int(vt):
+                        vt=0
+            except Vote.DoesNotExist:
+                print >> sys.stderr, "vote didn't exist previously"
+
+            vote_date = timezone.now()
+            vote, created = Vote.objects.update_or_create(user=request.user, post=post,date_voted__gte = dt_aware, defaults={'date_voted': vote_date, 'vote_type':vt})
+            if(vt==0):
+                vote.delete();
+
+            votes = Vote.objects.filter(post=post).filter(~Q(vote_type = 0)).aggregate(vote_num=Coalesce(Sum('vote_type'),0))
+            number_of_votes =  votes.get('vote_num')
+            self_voting = False
+        else:
+            self_voting = True
+    else:
+        error=True
+
     data = {
-        'number_of_votes': number_of_votes.get('vote_num'),
+        'number_of_votes': number_of_votes,
+        'vt': int(vt),
+        'error':error,
+        'self_voting': self_voting
     }
+    return JsonResponse(data)
+
+
+@login_required()
+def set_profile(request):
+    name = request.GET.get('name', None)
+    city = request.GET.get('city', None)
+    user = User.objects.get(username=request.user.username)
+    if not request.user.is_authenticated and len(name) < 5 :
+        success = False
+    else:
+        user.first_name=name;
+        user.save();
+        success = True
+
+    user.last_name = city;
+    data = {
+        'success': success,
+        'name': name
+    }
+    return JsonResponse(data)
+
+@login_required()
+def answer_question(request):
+    pk = request.GET.get('pk', None)
+    content = request.GET.get('content', None)
+    post = Post.objects.get(pk=pk)
+    post = Post.objects.create(poster=request.user, is_question=0, question_id=pk, post_title = post.post_title, post_content = content, published_date = timezone.now(), tags=None,)
+    new_post_pk = -1
+
+    if post:
+        success = True
+        new_post_pk = post.pk
+        color = my_tags.colorise(post.pk);
+        data = {
+            'success': success,
+            'pk': new_post_pk,
+            'redirect': '../',
+            'color': color
+        }
+    else:
+        success = False
+        data = {
+            'success': False,
+        }
+
+
     return JsonResponse(data)

@@ -50,3 +50,7 @@
 .top-margin{
     margin-top:30px;
 }
+
+.toolbar a:hover {
+ cursor:pointer;
+}

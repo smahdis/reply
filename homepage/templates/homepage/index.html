@@ -5,24 +5,48 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Arvo">
     <link rel="stylesheet" href="{% static 'css/post.css' %}">
+
 {% endblock %}
 
 {% block content %}
     {% for post in posts %}
         {% include "homepage/posts/post.html" %}
     {% endfor %}
+    <div class="pagination" style="text-align: center; margin: 0px auto; display: block;">
+        {% if posts.has_other_pages %}
+            <ul class="pagination">
+                {% if posts.has_previous %}
+                    <li class="direction-ltr"><a href="?page={{ posts.previous_page_number }}">&laquo;</a></li>
+                {% else %}
+                    <li class="disabled direction-ltr"><span>&laquo;</span></li>
+                {% endif %}
+                {% for i in posts.paginator.page_range %}
+                    {% if posts.number == i %}
+                        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                    {% else %}
+                        <li><a href="?page={{ i }}">{{ i }}</a></li>
+                    {% endif %}
+                {% endfor %}
+                {% if posts.has_next %}
+                    <li class="direction-ltr"><a href="?page={{ posts.next_page_number }}">&raquo;</a></li>
+                {% else %}
+                    <li class="disabled direction-ltr"><span>&raquo;</span></li>
+                {% endif %}
+            </ul>
+        {% endif %}
+    </div>
 {% endblock %}
+
 
 {% block javascript %}
     <script src="{% static 'javascript/initial.js' %}"></script>
-
     <script type="text/javascript">
         $(document).ready(function(){
             $('.profile-pic').initial({
                 height: 24,
                 width: 24,
                 fontSize: 14,
-                fontFamily: 'sans-serif',
+                fontFamily: 'Tahoma, sans-serif',
             });
         });
     </script>
@@ -41,11 +65,7 @@
     </script>
 
 
-    <script>
-        $(document).ready(function(){
-            $('[data-toggle="tooltip"]').tooltip();
-        });
-    </script>
+
 
 
 
@@ -53,20 +73,59 @@
     <script>
         $(document).ready(function() {
             $('.vote-c').click(function(event) {
-                pk = $(this).val();
+                post_pk = $(this).attr("pk");
                 vote_type = $(this).attr("vote_type");
+                vote_btn = $(this);
+                id = $(this).id;
+                this_parent = $(this).parent;
+
+
                 $.ajax({
-                    url: '/ajax/upvote/',
+                    url: '/ajax/vote/',
                     data: {
-                        'pk': pk,
+                        'pk': post_pk,
                         'vote_type': vote_type
                     },
                     dataType: 'json',
                     success: function (data) {
-                        $("#number_of_votes").html(data.number_of_votes);
+                        if(data.self_voting) {
+                            $('.vote-c').parent().not(vote_btn).popover('hide').next('.popover').remove('.popover');
+                            vote_btn.parent().attr({
+                                'data-placement': 'auto right',
+                                'data-toggle': 'popover',
+                                'data-trigger': 'manual focus',
+                                'data-content': 'نمیتوانید به پست خودتان رای دهید.'
+                            });
+                            vote_btn.parent().popover("toggle");
+                            return;
+                        }
+                        $( 'button[pk = '+post_pk+']' ).siblings("div").html(data.number_of_votes);
+                        switch(data.vt) {
+                            case 0:
+                                if(vote_type==-1)
+                                {
+                                    $( 'button[pk = '+post_pk+']' ).find('#upvote-img').attr('src', '{% static 'img/upvote.svg' %}');
+                                    $( 'button[pk = '+post_pk+']' ).find('#downvote-img').attr('src', '{% static 'img/downvote.svg' %}');
+                                }
+                                else
+                                {
+                                    $( 'button[pk = '+post_pk+']' ).find('#upvote-img').attr('src', '{% static 'img/upvote.svg' %}');
+                                    $( 'button[pk = '+post_pk+']' ).find('#downvote-img').attr('src', '{% static 'img/downvote.svg' %}');
+                                }
+                                break;
+                            case 1:
+                                $( 'button[pk = '+post_pk+']' ).find('#upvote-img').attr('src', '{% static 'img/upvote-marked.svg' %}');
+                                $( 'button[pk = '+post_pk+']' ).find('#downvote-img').attr('src', '{% static 'img/downvote.svg' %}');
+                                break;
+                            case -1:
+                                $( 'button[pk = '+post_pk+']' ).find('#upvote-img').attr('src', '{% static 'img/upvote.svg' %}');
+                                $( 'button[pk = '+post_pk+']' ).find('#downvote-img').attr('src', '{% static 'img/downvote-marked.svg' %}');
+                                break;
+                        }
+
                     },
                     error: function (data) {
-                        alert("error " + data.created);
+{#                        alert("really error ");#}
 
                     }
                 });

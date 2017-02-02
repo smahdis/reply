@@ -137,12 +137,13 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
 
 LOGIN_URL = '/register/'
 
 
 BLEACH_VALID_TAGS = ['','','','i','h1','h2','h3','p', 'b', 'i', 'strike', 'ul', 'li', 'ol', 'br',
-                     'span', 'blockquote', 'hr', 'a', 'img', 'code', 'div']
+                     'span', 'blockquote', 'hr', 'a', 'img', 'code', 'div','u']
 BLEACH_VALID_ATTRS = {
     'span': ['style', ],
     'p': ['align', ],

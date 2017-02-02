@@ -37,8 +37,8 @@
 
                 <span class="hidden-xs" style="margin-left: 30px; margin-right: 30px;"></span>
 
-                <a class="hidden-xs" data-command='undo hidden-xs ' style=""  href="#"><i class="fa fa-undo"></i></a>
-                <a class="hidden-xs" data-command='redo hidden-xs' style="" href="#"><i class="fa fa-repeat"></i></a>
+                <a class="hidden-xs" data-command='undo' style=""  href="#"><i class="fa fa-undo"></i></a>
+                <a class="hidden-xs" data-command='redo' style="" href="#"><i class="fa fa-repeat"></i></a>
             </div>
         </div>
         <div class="bottom-margin" style="margin-right: auto; margin-left: auto; max-width: 960px; direction: rtl;">
@@ -58,16 +58,13 @@
 
             <textarea hidden type="text" class="realContent mdl-textfield__input formEdit" rows= "5" cols="80" dir="rtl" name="{{ form.post_content.name }}" id="id_post_content" value="{{ form.post_content.value|xstr }}" ></textarea>
 
-
-            <div id="editor" class='editor panel panel-default' style="margin-top:20px;" contenteditable>
+            <div id="editor" class='editor panel panel-default post_container' style="margin-top:20px; border: none;" contenteditable>
                 {{ form.post_content.value|xstr|safe }}
             </div>
 
-
-
             <div style="display: block; width:100%; background-color: white; padding:40px; text-align: center">
                 <label>لطفا حداقل یک تگ مرتبط با سئوال وارد نمایید. تگ ها را با فاصله از هم جدا کنید.</label>
-                <input class="form-control" type="text"  dir="rtl" name="{{ form.tags.name }}" id="id_{{ form.tags.name }}" value="{{ post.return_tags|xstr|join:", " }}">
+                <input class="form-control" type="text"  dir="rtl" name="{{ form.tags.name }}" id="id_{{ form.tags.name }}" value="{{ post.return_tags|join:", " }}">
             </div>
             <div style="text-align: center" class="top-margin bottom-margin">
                 <button class="btn btn-success" style="min-width: 200px; text-align: center" type="submit">
@@ -130,8 +127,6 @@
             }
             else
                 document.execCommand($(this).data('command'), false, null);
-
-
         });
 
         function DoSubmit(){

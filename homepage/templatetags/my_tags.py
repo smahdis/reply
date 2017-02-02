@@ -2,28 +2,22 @@
 from datetime import datetime, timedelta
 from django.utils import timezone
 from django import template
+from homepage.models import Post, Vote
+from django.utils.encoding import python_2_unicode_compatible, smart_unicode
+
 from django.utils.timesince import timesince
 import math
+import logging
+import sys
+logger = logging.getLogger(__name__)
+from django.db.models import Q, Sum
+from khayyam import *
+import re
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 register = template.Library()
-
-# def lower(value): # Only one argument.
-#     """Converts a string into all lowercase"""
-#     return value.lower()
-# @python_2_unicode_compatible
-# @register.filter
-# def days_ago(value):
-#     # now = datetime.now()
-#     now = timezone.now()
-#     print (now, value)
-#     try:
-#         difference = now - value
-#     except:
-#         return value
-#
-#     if difference <= timedelta(minutes=1):
-#         return 'just now'
-#     return '%(time)s ago' % {'time': timesince(value)}#.split(', ')[0]}
 
 @register.filter
 def trim_end(value):
@@ -78,8 +72,8 @@ def pretty_date(time=False):
         return str(day_diff / 30) + " ماه قبل"
     return str(day_diff / 365) + " سال قبل"
 
-colorList = ['#f16364','#f58559','#f9a43e','#e4c62e','#67bf74','#59a2be',
-             '#2093cd','#ad62a7','#00213B','#00623B','#006292','#0062E8',
+colorList = ['#f16364','#f58559','#f9a43e','#215288','#67bf74','#59a2be',
+             '#2093cd','#ad62a7','#00213B','#33777b','#006292','#0062E8',
              '#00A400','#00A47E','#3C0059','#701EB7','#B553B7','#E54363',
              '#4374E6','#093145','#0c374d','#0d3d56','#3c6478','#107896','#1496bb',]
 
@@ -93,4 +87,67 @@ def colorise(id):
 def xstr(s):
     if s is None:
         return ''
-    return str(s)
+    return str(s).encode('utf8')
+
+@register.filter
+def total_votes(var):
+    post = var
+    check_time = timezone.datetime.now() - timezone.timedelta(hours=24)
+    dt_aware = timezone.make_aware(check_time, timezone.get_current_timezone())
+    number_of_votes = Vote.objects.filter(post=post).filter(~Q(vote_type = 0)).aggregate(vote_num=Sum('vote_type'))
+
+    return number_of_votes.get('vote_num')
+
+@register.filter
+def userVotedThisPost(var, uid):
+    if uid is None:
+        return False
+
+    post = var
+    user_id = uid
+
+    check_time = timezone.datetime.now() - timezone.timedelta(hours=24)
+    dt_aware = timezone.make_aware(check_time, timezone.get_current_timezone())
+    v = Vote.objects.get(post=post, user_id = user_id, date_voted__gte = dt_aware)
+
+    if v:
+        return v.vote_type
+    else:
+        return False
+
+@register.filter
+def to_jalali(date):
+    time = timezone.localtime(date)
+    time = time.replace(tzinfo=None)
+    # jalali = jdatetime.date.fromgregorian(date=time)
+    jalali = JalaliDatetime(time).strftime('%A %d %B %y');
+    return jalali
+
+@register.filter
+def getPostAnswersCount(post):
+    answers = Post.objects.filter(is_question=0, is_published=1, question_id__exact=post.id).order_by('-created_date')
+    return answers.count()
+
+@register.filter
+def get_parent_question(post):
+    title=''
+    try:
+        title = Post.objects.get(is_question=1, is_published=1, id = post.question_id).post_title
+    except Post.DoesNotExist:
+        title='not exist'
+
+    return title
+
+@register.filter
+def find_username(user):
+    # username = ''
+
+    if len(user.first_name) > 1:
+        return user.first_name
+    else:
+        phone = user.username
+        if(len(phone) < 13):
+            phone = phone.lstrip('0')
+
+        filtered_number = re.sub(r".*?(\d{3})(\d{4})(\d{3})", r'0\1####\3', phone)
+        return filtered_number

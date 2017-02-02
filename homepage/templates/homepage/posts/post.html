@@ -3,16 +3,28 @@
 
 <div class="row">
     <div class="col-md-1 col-lg-2"></div>
-    <div class="col-sm-12 col-sm-12 col-md-10 col-lg-8">
+    <div class="col-xs-12 col-sm-12 col-md-10 col-lg-8">
         <div class="panel panel-default post_container" style="background-color: {{ post.id|colorise }}; border:0px">
             <div class="row post_vote_plus_content">
                 <div class="col-sm-1 vote-container hidden-xs" >
                     <div style="text-align: center;">
-                        <button class="mdl-button mdl-js-button mdl-js-ripple-effect vote-c" id="upvote" vote_type = "1" value="{{ post.pk }}"><img class="icons" src="{% static 'img/upvote.svg' %}" alt="Upvote"></button>
-                        <div id="number_of_votes" style="margin-top: 15px; margin-bottom: 15px; font-family: 'Yekan'; font-size: 24px; color: white">0</div>
-                        {% if request.is_tablet %}
-                            <button class="mdl-button mdl-js-button mdl-js-ripple-effect vote-c" id="downvote" vote_type = "-1" value="{{ post.pk }}"><img class="icons" src="{% static 'img/downvote.svg' %}" alt="Upvote"></button>
-                        {% endif %}
+                        <button id="example-body" class="btn btn-success" rel="popover" data-content="" data-original-title="Width equals `body` width (`container`)">Click for popover (Container = `body`)</button>
+                        {#                    {{ post|userVotedThisPost:request.user.id }}#}
+                        <button class="vote-c" id="upvote" vote_type = "1" pk="{{ post.pk }}">
+                            {% if post|userVotedThisPost:request.user.id == 1 %}
+                                <img id="upvote-img" class="icons" src="{% static 'img/upvote-marked.svg' %}" alt="Upvote">
+                            {% else %}
+                                <img id="upvote-img" class="icons" src="{% static 'img/upvote.svg' %}" alt="Upvote">
+                            {% endif %}
+                        </button>
+                        <div id="number_of_votes" style="direction: ltr; margin-top: 15px; margin-bottom: 15px; font-family: 'Vazir'; font-size: 24px; color: white">{{ post|total_votes|default:"0" }}</div>
+                        <button class="mdl-button mdl-js-button mdl-js-ripple-effect vote-c" id="downvote" vote_type = "-1" pk="{{ post.pk }}">
+                            {% if post|userVotedThisPost:request.user.id == -1 %}
+                                <img id="downvote-img" class="icons" src="{% static 'img/downvote-marked.svg' %}" alt="Downvote">
+                            {% else %}
+                                <img id="downvote-img" class="icons" src="{% static 'img/downvote.svg' %}" alt="Downvote">
+                            {% endif %}
+                        </button>
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-11 col-md-11 col-lg-11" >
@@ -23,7 +35,11 @@
                         </div>
                         <div >
                             {% autoescape on %}
-                                <p id="post_content">{{ post.post_content|truncatewords_html:30|striptags }}</p>
+                                {% if view_detail == True %}
+                                    <p id="post_content">{{ post.post_content|safe|linebreaksbr}}</p>
+                                {% else %}
+                                    <p id="post_content">{{ post.post_content|truncatewords_html:30|striptags }}</p>
+                                {% endif  %}
                             {% endautoescape %}
                         </div>
                     </div>
@@ -45,29 +61,48 @@
             {#        color: black;   border-top: 1px solid #1d85b9; box-shadow: 1px 1px 1px #888888;#}
             <div class="panel-footer panel-footer-border" style="background-color: {{ post.id|colorise }}; ">
                 <div class="post-footer">
-                    {#                    <img  data-toggle="tooltip" title={{ post.poster.username }} data-placement="left" id="tt{{ post.id }}" style="border-radius: 50%; margin-left: 10px; margin-right: 10px;" align="right" class="profile-pic media-object  img-circle" data-name="{{ post.poster.username }}"/>#}
                     {% if post.poster.first_name %}
-                        <img  data-toggle="tooltip" title={{ post.poster.username }} data-placement="left" id="tt{{ post.id }}" style="border-radius: 50%; margin-left: 10px; margin-right: 10px;" align="right" class="profile-pic media-object  img-circle" data-name="{{ post.poster.username }}"/>
+                        <img  data-toggle="tooltip" title={{ post.poster|find_username }} data-placement="left" id="tt{{ post.id }}" style="border-radius: 50%; margin-left: 10px; margin-right: 10px;" align="right" class="profile-pic media-object  img-circle" data-name="{{ post.poster|find_username}}"/>
                     {% else %}
-                        <img style="border-radius: 50%;  margin-left: 10px; margin-right: 10px;" align="right" class="icons-small" src="{% static 'img/user.svg' %}" alt="{{ request.user.username }}">
+                        <img style="border-radius: 50%;  margin-left: 10px; margin-right: 10px;" align="right" class="icons-small" src="{% static 'img/user.svg' %}" alt="{{ post.poster|find_username }}">
                     {% endif %}
-                    {% if not request.is_phone %}
-                        <div class="display-inline pull-left visible-xs" style="direction:ltr">
-                            <button ><img class="icons-small" src="{% static 'img/upvote.svg' %}" alt="Up vote"></button>
-                            <div class="display-inline" style="font-family: 'Segoe UI'; font-size: 18px; color: white; margin:0px 10px">12</div>
-                            <button ><img class="icons-small" src="{% static 'img/downvote.svg' %}" alt="Down vote"></button>
-                        </div>
-                    {% endif %}
-                    {% if request.is_phone %}
+
+                    <div class="display-inline pull-left visible-xs" style="direction:ltr">
+                        <button class="vote-c" id="upvote" vote_type = "1" pk="{{ post.pk }}">
+                            {% if post|userVotedThisPost:request.user.id == 1 %}
+                                <img id="upvote-img" class="icons-small" src="{% static 'img/upvote-marked.svg' %}" alt="Upvote">
+                            {% else %}
+                                <img id="upvote-img" class="icons-small" src="{% static 'img/upvote.svg' %}" alt="Upvote">
+                            {% endif %}
+                        </button>
+                        <div id="number_of_votes" class="display-inline" style="direction: ltr; margin:0px 20px; font-family: 'Vazir'; font-size: 16px; color: white">{{ post|total_votes|default:"0" }}</div>
+                        <button class="mdl-button mdl-js-button mdl-js-ripple-effect vote-c" id="downvote" vote_type = "-1" pk="{{ post.pk }}">
+                            {% if post|userVotedThisPost:request.user.id == -1 %}
+                                <img id="downvote-img" class="icons-small" src="{% static 'img/downvote-marked.svg' %}" alt="Downvote">
+                            {% else %}
+                                <img id="downvote-img" class="icons-small" src="{% static 'img/downvote.svg' %}" alt="Downvote">
+                            {% endif %}
+                        </button>
+                        {#                                            <div class="display-inline" style="font-family: 'Segoe UI'; font-size: 18px; color: white; margin:0px 10px">12</div>#}
+                        {#                        <button ><img class="icons-small" src="{% static 'img/downvote.svg' %}" alt="Down vote"></button>#}
+                    </div>
+
 
                     <div style="font-size: 16px; color: #fff; " >
                         <em class="days_ago">&#8236; {{ post.created_date|pretty_date }}</em>
                         <div style="display: inline" class="hidden-xs">
                             <div style="display: inline">توسط:</div>
-                            <h5 style="display: inline;">{{post.poster.username }}</h5>
+                            <h5 style="display: inline; direction: ltr;">
+                                {#                            {{ request.user }}#}
+                                {#                            {{ post.poster }}#}
+                                {% if request.user == post.poster %}
+                                    شما
+                                {% else %}
+                                    {{post.poster|find_username }}
+                                {% endif %}
+                            </h5>
                         </div>
                     </div>
-                {% endif %}
                 </div>
             </div>
         </div>

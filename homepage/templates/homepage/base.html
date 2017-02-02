@@ -1,6 +1,25 @@
 {% load staticfiles %}
 <!doctype html>
 <html>
+{% if not request.is_phone and not request.is_mobile %}
+    <style>
+        .navbar-collapse.collapse {
+            display: block!important;
+        }
+
+        .navbar-nav>li, .navbar-nav {
+            float: left !important;
+        }
+
+        .navbar-nav.navbar-right:last-child {
+            margin-right: -15px !important;
+        }
+
+        .navbar-right {
+            float: right!important;
+        }
+    </style>
+{% endif %}
 <head>
     <title>Reply</title>
     <meta charset="utf-8">
@@ -19,46 +38,51 @@
 <div class="navbar navbar-inverse" id="navbar" >
     <div class="container">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-
+            {% if request.is_phone or request.is_mobile %}
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            {% endif %}
             <a class="navbar-brand" style="align:right;" href="{% url 'index'  %}">Reply</a>
 
         </div>
-        <div class="collapse navbar-collapse">
-            <ul class="nav navbar-nav navbar-right" style="margin:0px; padding:0px; direction: rtl;">
-                <li ><a href="#">داغ ترین ها</a></li>
-                <li class="active"><a href="#about">پر بازدیدترین ها</a></li>
-                <li><a href="{% url 'index'  %}">صفحه اصلی</a></li>
-            </ul>
-            <ul class="nav navbar-nav navbar-left" style="margin:0px; padding:0px">
-                {% if request.user.is_authenticated %}
-                    <li class="dropdown">
-                        <a class="dropdown-toggle pull-right" data-toggle="dropdown" href="#">
-                            <span class="caret"></span>
-                            {{ request.user.username }}
-                            {% if request.user.first_name %}
-                                <img style="border-radius: 50%;" class="profile-pic" data-name="{{ request.user.first_name }}"/>
-                            {% else %}
-                                <span class="glyphicon glyphicon-user"></span>
-                            {% endif %}
-                        </a>
-                        <ul class="dropdown-menu pull-right" style="text-align:right;">
-                            <li><a href="{% url 'dashboard' %}">صفحه کاربری</a></li>
-                            <li><a href="#">سئوالات من</a></li>
-                            <li><a href="{% url 'logout_view' %}">خروج</a></li>
-                        </ul>
-                    </li>
+        {% if request.is_phone or request.is_mobile %}
+            <div class="collapse navbar-collapse">
+        {% endif %}
+        <ul class="nav navbar-nav navbar-right" style="margin:0px; padding:0px; direction: rtl;">
+            <li ><a href="#">داغ ترین ها</a></li>
+            <li class="active"><a href="#about">پر بازدیدترین ها</a></li>
+            <li><a href="{% url 'index'  %}">صفحه اصلی</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-left" style="margin:0px; padding:0px">
+            {% if request.user.is_authenticated %}
+                <li class="dropdown">
+                    <a class="dropdown-toggle pull-right" data-toggle="dropdown" href="#">
+                        <span class="caret"></span>
+                        {{ request.user.username }}
+                        {% if request.user.first_name %}
+                            <img style="border-radius: 50%;" class="profile-pic" data-name="{{ request.user.first_name }}"/>
+                        {% else %}
+                            <span class="glyphicon glyphicon-user"></span>
+                        {% endif %}
+                    </a>
+                    <ul class="dropdown-menu pull-right" style="text-align:right;">
+                        <li><a href="{% url 'dashboard' %}">صفحه کاربری</a></li>
+                        <li><a href="#">سئوالات من</a></li>
+                        <li><a href="{% url 'logout_view' %}">خروج</a></li>
+                    </ul>
+                </li>
+                <li ><a href="{% url 'post_new'  %}">سئوال جدید</a></li>
 
-                {% else %}
-                    <li><a href="{% url 'register' %}">ورود / ثبت نام</a></li>
-                {% endif %}
-            </ul>
-        </div><!--/.nav-collapse -->
-
+            {% else %}
+                <li><a href="{% url 'register' %}">ورود / ثبت نام</a></li>
+            {% endif %}
+        </ul>
+        {% if request.is_phone or request.is_mobile %}
+            </div><!--/.nav-collapse -->
+        {% endif %}
     </div>
 </div>
 <div class="container" id="container">
@@ -66,111 +90,6 @@
     {% endblock %}
 </div>
 
-{#</nav>#}
-{#mdl-layout--no-desktop-drawer-button#}
-{#<div class="mdl-layout mdl-layout  mdl-js-layout mdl-layout--fixed-header" style="direction: ltr;">#}
-{#    <header class="mdl-layout__header mdl-layout__header--scroll" id="header" >#}
-{#        <div class="mdl-layout__header-row" style="direction: rtl;">#}
-{#            <span style="font-family: Yekan; color: #fff; font-size:22px; font-weight: normal; margin: 20px"><a style="text-decoration: none;" class="mdl-js-button mdl-js-ripple-effect" href="{% url 'index' %}">ریپلای</a></span>#}
-{#            <div class="mdl-layout-spacer"></div>#}
-{#            <nav class="mdl-navigation mdl-layout--large-screen-only" style="font-family: Yekan; ">#}
-{#                <a style="color: #fff; font-size:18px; font-weight: bold" class="mdl-navigation__link mdl-js-button mdl-js-ripple-effect is-active" href="#">تازه ترین ها</a>#}
-{#                <a style="color: #fff; font-size:18px; font-weight: bold" class="mdl-navigation__link mdl-js-button mdl-js-ripple-effect" href="#">پر پاسخ ترین ها</a>#}
-{#                                <a style="color: #fff; font-size:18px; font-weight: bold" class="mdl-navigation__link mdl-js-button mdl-js-ripple-effect" href="#">پر بازدید ترین ها</a>#}
-{#                {% if request.user.is_authenticated %}#}
-{#                    <a style="color: #fff; font-size:18px; font-weight: bold; text-decoration: none; font-family: 'Roboto', 'Helvetica', sans-serif;" class="mdl-navigation__link mdl-js-button mdl-js-ripple-effect" href="{% url 'dashboard' %}">#}
-{#                        {{ request.user.username }}#}
-{#                        {% if request.user.first_name %}#}
-{#                            <img  style="border-radius: 50%; margin: 10px" class="profile-pic" data-name="{{ request.user.first_name }}"/>#}
-{#                        {% else %}#}
-{#                            <img style="border-radius: 50%; margin: 10px" class="icons" src="{% static 'img/user.svg' %}" alt="{{ request.user.username }}">#}
-{#                        {% endif %}#}
-{#                    </a>#}
-{##}
-{##}
-{#                {% else %}#}
-{#                    <a style="color: #fff; font-size:18px; font-weight: bold" class="mdl-navigation__link mdl-js-button mdl-js-ripple-effect" href="{% url 'register' %}">ورود / ثبت نام</a>#}
-{#                {% endif %}#}
-{#            </nav>#}
-{#        </div>#}
-{##}
-{#    </header>#}
-{#    <div class="mdl-layout__drawer" style="background-color: darkcyan">#}
-{#        {% if request.user.is_authenticated %}#}
-{#            <header class="demo-drawer-header">#}
-{#                <div style="margin: 0px auto; padding: 20px; text-align: center; background-color: darkBlue">#}
-{##}
-{#                    <div class="generalClass" id="profile-menu">#}
-{#                    <span>{{ request.user.username }}</span>#}
-{#                        <a style="color: #fff; font-size:18px; font-weight: normal; text-decoration: none;" class="mdl-js-button mdl-js-ripple-effect" href="#">#}
-{#                            <div>#}
-{#                                {% if request.user.first_name %}#}
-{#                                    <img  style="border-radius: 50%; margin: 10px" class="current_user_profile-pic" data-name="{{ request.user.first_name }}"/>#}
-{#                                {% else %}#}
-{#                                    <img style="border-radius: 50%; margin: 10px" class="icons-large" src="{% static 'img/user.svg' %}" alt="{{ request.user.username }}">#}
-{#                                {% endif %}#}
-{#                            </div>#}
-{#                            {{ request.user.username }}#}
-{#                        </a>#}
-{#                    </div>#}
-{##}
-{#                    <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect"#}
-{#                        data-mdl-for="profile-menu">#}
-{#                        <li class="mdl-menu__item">Some Action</li>#}
-{#                        <li class="mdl-menu__item">Another Action</li>#}
-{#                        <li class="mdl-menu__item"><a href="{% url 'logout_view' %}"> خروج از اکانت</a></li>#}
-{#                    </ul>#}
-{##}
-{#                </div>#}
-{#            </header>#}
-{#            <div style="margin-top: -3vh; flex-shrink: 0; ">#}
-{#                <div style="float: right; margin-right: 10px">#}
-{#                    <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--mini-fab mdl-button--colored mdl-shadow--4dp mdl-color--accent" id="add">#}
-{#                        <i class="material-icons" role="presentation">add</i>#}
-{#                        <span class="visuallyhidden">سئوال جدید</span>#}
-{#                    </button>#}
-{#                </div>#}
-{#            </div>#}
-{#        {% endif %}#}
-{#        <nav class="mdl-navigation" style="font-family: Yekan;  direction: rtl;" >#}
-{#            <a style="color: #fff; font-size:18px; font-weight: normal" class="mdl-js-button mdl-js-ripple-effect" href="#"><i class="material-icons">inbox</i>سئوال جدید</a>#}
-{#            <div class="mdl-layout-spacer"></div>#}
-{#            <span></span>#}
-{#            <span style="color: darkgray; font-size:18px; font-weight: normal; margin: 20px">ترین های هفته</span>#}
-{#            <div class="mdl-layout-spacer"></div>#}
-{#            <a style="color: #fff; font-size:18px; font-weight: normal;" class="mdl-js-button mdl-js-ripple-effect" href="#"><i style="margin-left: 20px" class="material-icons">inbox</i>جدیدترین</a>#}
-{#            <a style="color: #fff; font-size:18px; font-weight: normal;" class="mdl-js-button mdl-js-ripple-effect" href="#"><i class="material-icons">inbox</i>داغ ترین</a>#}
-{#            <a style="color: #fff; font-size:18px; font-weight: normal;" class="mdl-js-button mdl-js-ripple-effect" href="#"><i class="material-icons">inbox</i>پربازدیدترین</a>#}
-{#            <a style="color: #fff; font-size:18px; font-weight: normal;" class="mdl-js-button mdl-js-ripple-effect" href="#"><i class="material-icons">inbox</i>رو به رشد</a>#}
-{#            <a style="color: #fff; font-size:18px; font-weight: normal;" class="mdl-js-button mdl-js-ripple-effect" href="#"><i class="material-icons">inbox</i>برگزیده</a>#}
-{##}
-{#        </nav>#}
-{##}
-{#    </div>#}
-{##}
-{#    <div class="mdl-layout--large-screen-only mdl-layout__header-row"></div>#}
-{##}
-{##}
-{#    <main class="mdl-layout__content" style="flex: 1 0 auto;">#}
-{#        <div class="page-content">#}
-{#            {% block content %}#}
-{#            {% endblock %}#}
-{#        </div>#}
-{##}
-{#    </main>#}
-{#    <footer class="mdl-mini-footer">#}
-{#        <div class="mdl-mini-footer__left-section">#}
-{#            <div class="mdl-logo">Title</div>#}
-{#            <ul class="mdl-mini-footer__link-list">#}
-{#                <li><a href="#">Help</a></li>#}
-{#                <li><a href="#">Privacy & Terms</a></li>#}
-{#            </ul>#}
-{#        </div>#}
-{#    </footer>#}
-{#</div>#}
-{##}
-{##}
-{##}
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -184,7 +103,12 @@
         });
     });
 </script>
-
+<script>
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+        $('[data-toggle="popover"]').popover();
+    });
+</script>
 {% block javascript %}{% endblock %}
 
 

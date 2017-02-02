@@ -13,6 +13,8 @@ urlpatterns = [
     url(r'^dashboard/$', views.dashboard, name='dashboard'),
     url(r'^ajax/validate_username/$', views.validate_username, name='validate_username'),
     url(r'^ajax/validate_phone_number/$', views.validate_phone_number, name='validate_phone_number'),
-    url(r'^ajax/upvote/$', views.upvote, name='upvote'),
+    url(r'^ajax/vote/$', views.vote, name='vote'),
+    url(r'^ajax/set_profile/$', views.set_profile, name='set_profile'),
+    url(r'^ajax/answer_question/$', views.answer_question, name='answer_question'),
     # url(r'^ajax/downvote/$', views.validate_phone_number, name='validate_phone_number'),
 ]

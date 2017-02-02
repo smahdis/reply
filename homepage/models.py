@@ -33,6 +33,9 @@ class Post(models.Model):
 
     tags = TaggableManager()
 
+
+
+
     def return_tags(self):
         taglist = self.tags.names()
         return taglist
