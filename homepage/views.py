@@ -33,6 +33,8 @@ def index(request):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         paged_posts = paginator.page(paginator.num_pages)
+    print >> sys.stderr, paged_posts
+
     return render(request, 'homepage/index.html', {'posts': paged_posts})
 
 
