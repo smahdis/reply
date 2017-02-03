@@ -124,6 +124,14 @@ def to_jalali(date):
     return jalali
 
 @register.filter
+def to_jalali_precise(date):
+    time = timezone.localtime(date)
+    time = time.replace(tzinfo=None)
+    jalali = JalaliDatetime(time).strftime('%A %d %B %y ساعت %H:%M');
+    # jalali1 = JalaliDatetime(time).strftime('%H:%M');
+    return jalali# + " ساعت " +jalali1
+
+@register.filter
 def getPostAnswersCount(post):
     answers = Post.objects.filter(is_question=0, is_published=1, question_id__exact=post.id).order_by('-created_date')
     return answers.count()

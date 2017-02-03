@@ -9,15 +9,17 @@
     <link rel="stylesheet" href="{% static 'css/editor.css' %}">
 
 {% endblock %}
-
 {% block content %}
     {{ form.media }}
 
     <form method="POST" onsubmit="DoSubmit();">
         {% csrf_token %}
         <div style="display: block; width:100%; background-color: white; padding:20px; text-align: center">
-            <input class="form-control" style="display: block; width:100%; max-width: 960px; margin: 0 auto; " placeholder="عنوان سئوال" type="text" id="post_title" name="{{ form.post_title.name }}" id="id_{{ form.post_title.name }}" value="{{ form.post_title.value|xstr }}" >
-
+            {% if form.instance.is_question  %}
+                <input class="form-control" style="display: block; width:100%; max-width: 960px; margin: 0 auto; " placeholder="عنوان سئوال" type="text" id="post_title" name="{{ form.post_title.name }}" id="id_{{ form.post_title.name }}" value="{{ form.post_title.value|xstr }}" >
+            {% else %}
+                <input disabled class="form-control" style="display: block; width:100%; max-width: 960px; margin: 0 auto; " placeholder="عنوان سئوال" type="text" id="post_title" name="{{ form.post_title.name }}" id="id_{{ form.post_title.name }}" value="{{ form.post_title.value|xstr }}" >
+            {% endif %}
         </div>
         <div style="background-color: #fff; text-align: center;">
             <div class="toolbar" >
@@ -61,20 +63,30 @@
             <div id="editor" class='editor panel panel-default post_container' style="margin-top:20px; border: none;" contenteditable>
                 {{ form.post_content.value|xstr|safe }}
             </div>
+            {% if form.instance.is_question  %}
+                <div style="display: block; width:100%; background-color: white; padding:40px; text-align: center">
+                    <label>لطفا حداقل یک تگ مرتبط با سئوال وارد نمایید. تگ ها را با فاصله از هم جدا کنید.</label>
+                    <input class="form-control" type="text"  dir="rtl" name="{{ form.tags.name }}" id="id_{{ form.tags.name }}" value="{{ post.return_tags|join:", " }}">
+                </div>
 
-            <div style="display: block; width:100%; background-color: white; padding:40px; text-align: center">
-                <label>لطفا حداقل یک تگ مرتبط با سئوال وارد نمایید. تگ ها را با فاصله از هم جدا کنید.</label>
-                <input class="form-control" type="text"  dir="rtl" name="{{ form.tags.name }}" id="id_{{ form.tags.name }}" value="{{ post.return_tags|join:", " }}">
-            </div>
-            <div style="text-align: center" class="top-margin bottom-margin">
-                <button class="btn btn-success" style="min-width: 200px; text-align: center" type="submit">
-                    <div id="submit_text"><i id="loading" class="fa fa-cog fa-save fa-lg fa-fw"></i>ذخیره</div>
-                </button>
-            </div>
+                <div style="text-align: center" class="top-margin bottom-margin">
+                    <button class="btn btn-success" style="min-width: 200px; text-align: center" type="submit">
+                        <div id="submit_text"><i id="loading" class="fa fa-cog fa-save fa-lg fa-fw"></i>ذخیره</div>
+                    </button>
+                </div>
+            {% endif %}
+
+        </div>
+    </form>
+    {% if not form.instance.is_question  %}
+        <div style="text-align: center" class="top-margin bottom-margin">
+            <button id="submit_answer" class="btn btn-success" style="min-width: 200px; text-align: center" type="submit">
+                <div id="submit_text"><i id="loading" class="fa fa-cog fa-spin fa-lg fa-fw"></i>   ویرایش    </div>
+            </button>
         </div>
 
-    </form>
 
+    {% endif %}
 {% endblock %}
 
 
@@ -106,9 +118,7 @@
                 singleFieldNode: null,
                 tabIndex: null,
                 placeholderText: 'تگ',
-
             });
-
         });
 
     </script>
@@ -120,7 +130,6 @@
             if (command == 'h1' || command == 'h2' || command == 'p' || command == 'blockquote' || command == 'code') {
                 document.execCommand('formatBlock', false, command);
             }
-
             if (command == 'createlink' || command == 'insertimage') {
                 url = prompt('Enter the link here: ', 'http:\/\/');
                 document.execCommand($(this).data('command'), false, url);
@@ -134,5 +143,36 @@
             document.getElementById('id_post_content').value = details;
             return true;
         }
+
+
+        var loading = $("#loading");
+        loading.hide();
+        $('#submit_answer').click(function(event) {
+            loading.show();
+            $.ajax({
+                url: '/ajax/edit_answer/',
+                data: {
+                    'pk': {{ post.pk }},
+                    'content': $("#editor").html(),
+                },
+                dataType: 'json',
+                success: function (data) {
+                    loading.hide();
+                    window.location.href = data.redirect + "#post" + {{ post.pk }};
+
+
+                },
+                error: function (data) {
+                    loading.hide();
+                }
+            });
+        });
     </script>
+
+
+    <script src="{% static 'javascript/edit_answer.js.js' %}"></script>
+    <script>
+        var post_pk = {{ post.pk }};
+    </script>
+
 {% endblock %}

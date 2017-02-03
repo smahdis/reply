@@ -16,5 +16,6 @@ urlpatterns = [
     url(r'^ajax/vote/$', views.vote, name='vote'),
     url(r'^ajax/set_profile/$', views.set_profile, name='set_profile'),
     url(r'^ajax/answer_question/$', views.answer_question, name='answer_question'),
+    url(r'^ajax/edit_answer/$', views.edit_answer, name='edit_answer'),
     # url(r'^ajax/downvote/$', views.validate_phone_number, name='validate_phone_number'),
 ]

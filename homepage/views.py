@@ -87,6 +87,30 @@ def post_edit(request, pk):
         form = PostForm(instance=post)
     return render(request, 'homepage/post_edit.html', {'form': form, 'post':post})
 
+@login_required()
+def edit_answer(request):
+    pk = request.GET.get('pk', None)
+    content = request.GET.get('content', None)
+    post = Post.objects.get(pk=pk)
+
+    new_post_pk = -1
+    if request.user.is_authenticated and post and request.user.is_active and request.user == post.poster:
+        post.post_content = content
+        post.save()
+        success = True
+        data = {
+            'success': success,
+            'pk': pk,
+            'redirect': '../../../question/' + str(post.question_id),
+        }
+    else:
+        success = False
+        data = {
+            'success': False,
+        }
+    return JsonResponse(data)
+
+
 def register(request):
     if request.user.is_authenticated:
         return redirect('index')
@@ -170,9 +194,12 @@ def logout_view(request):
     return redirect('index')
     # return HttpResponseRedirect(request,'/')
 
+from django.contrib.auth.models import Permission
 
 @login_required
 def dashboard(request):
+    print >> sys.stderr, Permission.objects.all()
+    print >> sys.stderr, request.user.has_perm('can_change_post')
     posts = Post.objects.filter(created_date__lte=timezone.now(), is_question=1, is_published=1, poster=request.user).order_by('-created_date')[:10]
     answers = Post.objects.filter(is_question=0, is_published=1, poster=request.user).order_by('-created_date')[:10]
     votes = Vote.objects.filter(post__poster=request.user).filter(~Q(vote_type = 0)).aggregate(vote_num=Coalesce(Sum('vote_type'),0))
@@ -248,7 +275,7 @@ def answer_question(request):
     post = Post.objects.create(poster=request.user, is_question=0, question_id=pk, post_title = post.post_title, post_content = content, published_date = timezone.now(), tags=None,)
     new_post_pk = -1
 
-    if post:
+    if request.user.is_authenticated and post:
         success = True
         new_post_pk = post.pk
         color = my_tags.colorise(post.pk);

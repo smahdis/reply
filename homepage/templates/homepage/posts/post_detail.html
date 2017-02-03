@@ -104,8 +104,8 @@
                 </div>\
                 <div class="panel-footer panel-footer-border" style="background-color: '+ color +'; ">\
                     <div class="post-footer">\
-                              <img style="border-radius: 50%;" class="profile-pic" data-name="{{ request.user.first_name }}"/>\
-                                {% if request.user.is_authenticated and request.user == post.poster or perms.post.change_post%}<a class="default-padding-righ-left-10" style="color: #fff; font-size:18px; font-weight: normal; float: left;" href=".."><i class="fa fa-pencil"></i></a>{% endif %}\
+                              <img style="border-radius: 50%; margin-left: 10px; margin-right: 10px;" align="right" class="profile-pic" data-name="{{ request.user.first_name }}"/>\
+                                {% if request.user.is_authenticated and request.user.is_active %}<a class="default-padding-righ-left-10" style="color: #fff; font-size:18px; font-weight: normal; float: left;" href="../../post/' +pk+ '/edit' +'"><i class="fa fa-pencil"></i></a>{% endif %}\
                         <div class="display-inline pull-left visible-xs" style="direction:ltr">\
                             <button class="vote-c" id="upvote" vote_type = "1" pk="'+ pk +'>\
                                     <img id="upvote-img" class="icons-small" src="{% static "img/upvote.svg" %}" alt="Upvote">\

@@ -1,7 +1,7 @@
 {% load my_tags %}
 {% load staticfiles %}
 
-<div class="row">
+<div class="row" id="post{{ post.pk }}">
     <div class="col-md-1 col-lg-2"></div>
     <div class="col-xs-12 col-sm-12 col-md-10 col-lg-8">
         <div class="panel panel-default post_container" style="background-color: {{ post.id|colorise }}; border:0px">

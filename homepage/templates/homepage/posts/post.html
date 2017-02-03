@@ -1,14 +1,13 @@
 {% load my_tags %}
 {% load staticfiles %}
 
-<div class="row">
+<div class="row" id="post{{ post.pk }}">
     <div class="col-md-1 col-lg-2"></div>
     <div class="col-xs-12 col-sm-12 col-md-10 col-lg-8">
         <div class="panel panel-default post_container" style="background-color: {{ post.id|colorise }}; border:0px">
             <div class="row post_vote_plus_content">
                 <div class="col-sm-1 vote-container hidden-xs" >
                     <div style="text-align: center;">
-                        <button id="example-body" class="btn btn-success" rel="popover" data-content="" data-original-title="Width equals `body` width (`container`)">Click for popover (Container = `body`)</button>
                         {#                    {{ post|userVotedThisPost:request.user.id }}#}
                         <button class="vote-c" id="upvote" vote_type = "1" pk="{{ post.pk }}">
                             {% if post|userVotedThisPost:request.user.id == 1 %}
@@ -62,7 +61,7 @@
             <div class="panel-footer panel-footer-border" style="background-color: {{ post.id|colorise }}; ">
                 <div class="post-footer">
                     {% if post.poster.first_name %}
-                        <img  data-toggle="tooltip" title={{ post.poster|find_username }} data-placement="left" id="tt{{ post.id }}" style="border-radius: 50%; margin-left: 10px; margin-right: 10px;" align="right" class="profile-pic media-object  img-circle" data-name="{{ post.poster|find_username}}"/>
+                        <img  data-toggle="tooltip" title="{{ post.poster|find_username }}"" data-placement="auto right" id="tt{{ post.id }}" style="border-radius: 50%; margin-left: 10px; margin-right: 10px;" align="right" class="profile-pic media-object  img-circle" data-name="{{ post.poster|find_username}}"/>
                     {% else %}
                         <img style="border-radius: 50%;  margin-left: 10px; margin-right: 10px;" align="right" class="icons-small" src="{% static 'img/user.svg' %}" alt="{{ post.poster|find_username }}">
                     {% endif %}
@@ -89,12 +88,10 @@
 
 
                     <div style="font-size: 16px; color: #fff; " >
-                        <em class="days_ago">&#8236; {{ post.created_date|pretty_date }}</em>
+                        <em data-toggle="tooltip" title="{{ post.created_date|to_jalali_precise}}" data-placement="auto top" class="days_ago">&#8236; {{ post.created_date|pretty_date }}</em>
                         <div style="display: inline" class="hidden-xs">
                             <div style="display: inline">توسط:</div>
                             <h5 style="display: inline; direction: ltr;">
-                                {#                            {{ request.user }}#}
-                                {#                            {{ post.poster }}#}
                                 {% if request.user == post.poster %}
                                     شما
                                 {% else %}

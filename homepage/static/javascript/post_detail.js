@@ -36,6 +36,7 @@ $(document).ready(function() {
                 {
                     // window.location.href = data.redirect + data.pk;
                     add_answer(details, data.pk, data.color);
+                    $("#editor").html("")
                 }
             },
             error: function (data) {
