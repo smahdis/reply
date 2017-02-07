@@ -7402,3 +7402,10 @@ VariableDoesNotExist: Failed lookup for key [view_detail] in u'[{\'False\': Fals
 "GET /static/javascript/vote.js HTTP/1.1" 304 0
 "GET /static/img/upvote-marked.svg HTTP/1.1" 304 0
 "GET /static/img/user.svg HTTP/1.1" 304 0
+Exception while resolving variable 'name' in template 'unknown'.
+Traceback (most recent call last):
+  File "C:\Python27\lib\site-packages\django\template\base.py", line 907, in _resolve_lookup
+    (bit, current))  # missing attribute
+VariableDoesNotExist: Failed lookup for key [name] in u'<RegexURLResolver <RegexURLPattern list> (admin:admin) ^admin/>'
+Not Found: /favicon.ico
+"GET /favicon.ico HTTP/1.1" 404 4508
